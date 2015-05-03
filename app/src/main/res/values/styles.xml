@@ -1,0 +1,17 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="RhomeTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="colorPrimary">#5db5ff</item>
+        <item name="colorPrimaryDark">#0284f0</item>
+        <item name="colorAccent">#ffc719</item>
+        <item name="colorControlNormal">#5db5ff</item>
+        <item name="colorControlActivated">#ffc719</item>
+        <item name="colorSwitchThumbNormal">#5db5ff</item>
+        <item name="colorControlHighlight">#5db5ff</item>
+        <item name="android:colorForeground">#5db5ff</item>
+
+    </style>
+
+</resources>

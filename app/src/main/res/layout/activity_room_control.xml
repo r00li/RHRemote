@@ -1,0 +1,39 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    android:background="#2c3339"
+    tools:context=".RoomControl"
+    >
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="160dp"
+        android:clipToPadding="false"
+        android:divider="#D1D1D1"
+        android:dividerHeight="1px"
+    />
+
+    <com.lukedeighton.wheelview.WheelView
+        android:id="@+id/wheelview"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_gravity="bottom"
+        app:wheelColor="#5db5ff"
+        app:rotatableWheelDrawable="false"
+        app:selectionAngle="90.0"
+        app:wheelPosition="bottom"
+        app:wheelOffsetY="40dp"
+        app:repeatItems="true"
+        app:wheelRadius="200dp"
+        app:wheelItemCount="10"
+        app:wheelPadding="13dp"
+        app:wheelItemRadius="40dp"/>
+
+</FrameLayout>

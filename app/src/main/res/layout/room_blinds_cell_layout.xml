@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="60dp">
+
+    <ImageView
+        android:layout_marginLeft="5dp"
+        android:padding="3dp"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView"
+        android:src="@drawable/ic_blind_vec"
+        android:scaleType="centerInside"
+        />
+
+    <TextView
+        android:layout_toRightOf="@id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="New Text"
+        android:textColor="#FFFFFF"
+        android:id="@+id/textView" />
+
+    <LinearLayout
+        android:id="@+id/blindIndicatorHolder"
+        android:orientation="vertical"
+        android:layout_width="35dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginRight="20dp">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:background="#FFFFFF"/>
+        <View
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:background="#FFFFFF"/>
+        <View
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:background="#FFFFFF"/>
+        </LinearLayout>
+
+    <Button
+        android:layout_width="35dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_toLeftOf="@id/blindIndicatorHolder"
+        android:layout_marginRight="10dp"
+        android:id="@+id/blindButtonPlus"
+        android:text="+"/>
+
+    <Button
+        android:layout_width="35dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_toLeftOf="@id/blindButtonPlus"
+        android:layout_marginRight="5dp"
+        android:id="@+id/blindButtonMinus"
+        android:text="-"/>
+
+</RelativeLayout>
