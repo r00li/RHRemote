@@ -31,24 +31,24 @@
         android:layout_alignParentRight="true"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:layout_marginRight="20dp">
+        android:layout_marginRight="19dp">
         <View
             android:layout_width="match_parent"
             android:layout_height="12dp"
-            android:background="#FFFFFF"/>
-        <View
-            android:layout_marginTop="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="12dp"
-            android:background="#FFFFFF"/>
+            android:background="#4Dffc719"/>
         <View
             android:layout_marginTop="4dp"
             android:layout_width="match_parent"
             android:layout_height="12dp"
-            android:background="#FFFFFF"/>
+            android:background="#FFffc719"/>
+        <View
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:background="#FFffc719"/>
         </LinearLayout>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:layout_width="35dp"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
@@ -58,13 +58,13 @@
         android:id="@+id/blindButtonPlus"
         android:text="+"/>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:layout_width="35dp"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:layout_toLeftOf="@id/blindButtonPlus"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="3dp"
         android:id="@+id/blindButtonMinus"
         android:text="-"/>
 

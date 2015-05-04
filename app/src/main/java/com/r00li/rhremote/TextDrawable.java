@@ -28,6 +28,13 @@ public class TextDrawable extends Drawable {
     @Override
     public void draw(Canvas canvas) {
         Rect bounds = getBounds();
+        Paint circlePaint = new Paint();
+        circlePaint.setColor(Color.WHITE);
+        circlePaint.setAntiAlias(true);
+        circlePaint.setStyle(Paint.Style.STROKE);
+        circlePaint.setStrokeWidth(1);
+        canvas.drawCircle(bounds.centerX(),bounds.centerY(),bounds.height()/2,circlePaint);
+
         canvas.drawText(text, bounds.centerX() - 15f /*just a lazy attempt to centre the text*/ * text.length(), bounds.centerY() + 15f, paint);
     }
 

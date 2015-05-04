@@ -11,6 +11,4 @@ public class Room implements Serializable {
     public String name;
     public String localURL;
     public String outisdeURL;
-
-
 }

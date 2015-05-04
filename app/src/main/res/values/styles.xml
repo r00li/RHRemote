@@ -9,9 +9,9 @@
         <item name="colorControlNormal">#5db5ff</item>
         <item name="colorControlActivated">#ffc719</item>
         <item name="colorSwitchThumbNormal">#5db5ff</item>
-        <item name="colorControlHighlight">#5db5ff</item>
+        <item name="colorControlHighlight">#0284f0</item>
         <item name="android:colorForeground">#5db5ff</item>
-
+        <item name="colorButtonNormal">#5db5ff</item>
     </style>
 
 </resources>

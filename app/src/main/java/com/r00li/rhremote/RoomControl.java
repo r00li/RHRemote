@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +33,7 @@ import java.util.HashMap;
 import com.lukedeighton.wheelview.adapter.*;
 import com.lukedeighton.wheelview.*;
 
-public class RoomControl extends ActionBarActivity {
+public class RoomControl extends AppCompatActivity {
 
 
     private static final int ITEM_COUNT = 3;
