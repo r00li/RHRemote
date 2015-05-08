@@ -2,6 +2,7 @@ package com.r00li.rhremote;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -135,7 +136,10 @@ public class RoomControl extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivityForResult(i, 1);
+
         }
 
         return super.onOptionsItemSelected(item);

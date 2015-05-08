@@ -1,0 +1,58 @@
+<PreferenceScreen  xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+    android:title="Nastavitve"
+    android:key="a">
+    <CheckBoxPreference
+        android:key="b"
+        android:summary="opis1"
+        android:title="Nastavitev1"
+        android:defaultValue="false" />
+    <Preference
+        android:key="c"
+        android:summary="opis2"
+        android:title="Nastavitev2" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Sobe"
+        android:key="d">
+        <PreferenceScreen
+            android:key="g"
+            android:title="soba1"
+            android:persistent="false">
+            <EditTextPreference
+                android:key="h"
+                android:summary="opis4"
+                android:text="ime"
+                android:title="uporabniško ime" />
+            <EditTextPreference
+                android:key="i"
+                android:summary="opis5"
+                android:text="geslo"
+                android:title="geslo" />
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="j"
+            android:title="soba2"
+            android:persistent="false">
+            <EditTextPreference
+                android:key="k"
+                android:summary="opis4"
+                android:text="ime"
+                android:title="uporabniško ime" />
+            <EditTextPreference
+                android:key="l"
+                android:summary="opis5"
+                android:text="geslo"
+                android:title="geslo" />
+        </PreferenceScreen>
+        <Preference
+            android:key="f"
+            android:summary="opis3"
+            android:title="Dodaj sobo">
+            <intent android:action="novasoba"/>
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
