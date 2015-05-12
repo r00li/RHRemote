@@ -61,7 +61,7 @@ public class RoomControl extends AppCompatActivity {
         }
 
         //populate the adapter, that knows how to draw each item (as you would do with a ListAdapter)
-        wheelView.setAdapter(new MaterialColorAdapter(entries));
+        wheelView.setAdapter(new MaterialColorAdapter(entries, this));
 
         //a listener for receiving a callback for when the item closest to the selection angle changes
         wheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectListener() {
@@ -100,23 +100,17 @@ public class RoomControl extends AppCompatActivity {
     }
 
     static class MaterialColorAdapter extends WheelArrayAdapter<Map.Entry<String, Integer>> {
-        MaterialColorAdapter(List<Map.Entry<String, Integer>> entries) {
+
+        Context context;
+
+        MaterialColorAdapter(List<Map.Entry<String, Integer>> entries, Context context) {
             super(entries);
+            this.context = context;
         }
 
         @Override
         public Drawable getDrawable(int position) {
-            Drawable[] drawable = new Drawable[] {
-                    createOvalDrawable(getItem(position).getValue()),
-                    new TextDrawable("" + position)
-            };
-            return new LayerDrawable(drawable);
-        }
-
-        private Drawable createOvalDrawable(int color) {
-            ShapeDrawable shapeDrawable = new ShapeDrawable(new OvalShape());
-            shapeDrawable.getPaint().setColor(color);
-            return shapeDrawable;
+            return new TextDrawable("" + position, context.getResources().getDrawable(R.drawable.ic_blind_vec));
         }
     }
 

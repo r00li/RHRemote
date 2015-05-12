@@ -73,7 +73,7 @@ public class WheelView extends View {
     //that dragging the wheel near the center doesn't cause the wheel's angle to change
     //drastically. It is squared to provide a linear function once multiplied by 1/r^2
     private static final int TOUCH_FACTOR_SIZE = 20;
-    private static final float TOUCH_DRAG_COEFFICIENT = 0.8f;
+    private static final float TOUCH_DRAG_COEFFICIENT = 0.7f;
 
     private static final float[] TOUCH_FACTORS;
     static {
