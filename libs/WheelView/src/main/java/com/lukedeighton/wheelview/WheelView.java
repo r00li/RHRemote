@@ -1006,6 +1006,8 @@ public class WheelView extends View {
                     }
                 }
 
+                drawable.setAlpha((i==mSelectedPosition)?255:0);
+
                 if (drawable != null) {
                     drawable.setBounds(sTempRect);
                     drawable.draw(canvas);
@@ -1026,6 +1028,7 @@ public class WheelView extends View {
         float itemAngle = mWheelBounds.angleToDegrees(x, y);
         float angleFromSelection = Circle.shortestAngle(itemAngle, mSelectionAngle);
         float relativePos = angleFromSelection / mItemAngle * 2f;
+        itemState.isSelected = mSelectedPosition == adapterPosition;
 
         itemState.mAngleFromSelection = angleFromSelection;
         itemState.mRelativePos = relativePos;
@@ -1053,6 +1056,17 @@ public class WheelView extends View {
         float mAngleFromSelection;
         float mRelativePos;
         int mAdapterPosition; //TODO
+
+        public boolean isSelected() {
+            return isSelected;
+        }
+
+        void setIsSelected(boolean isSelected)
+        {
+            this.isSelected = isSelected;
+        }
+
+        boolean isSelected;
 
         private ItemState() {
             mBounds = new Circle();

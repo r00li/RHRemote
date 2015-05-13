@@ -87,7 +87,7 @@ public class RoomControl extends AppCompatActivity {
 
         // ROOM ADAPTER
         RoomControlAdapter mAdapter = new RoomControlAdapter(this);
-        for (int i = 1; i < 50; i++) {
+        for (int i = 1; i < 10; i++) {
             mAdapter.addItem("item " + i);
         }
         ListView list = (ListView) findViewById(R.id.listview);
@@ -110,7 +110,18 @@ public class RoomControl extends AppCompatActivity {
 
         @Override
         public Drawable getDrawable(int position) {
-            return new TextDrawable("" + position, context.getResources().getDrawable(R.drawable.ic_blind_vec));
+            TextDrawable bottomLayer;
+            if (position == 0)
+                bottomLayer = new TextDrawable("" + position, context.getResources().getDrawable(R.drawable.ic_shower), context);
+            else
+                bottomLayer = new TextDrawable("" + position, context.getResources().getDrawable(R.drawable.ic_bed), context);
+            return bottomLayer;
+        }
+
+        private Drawable createOvalDrawable(int color) {
+            ShapeDrawable shapeDrawable = new ShapeDrawable(new OvalShape());
+            shapeDrawable.getPaint().setColor(color);
+            return shapeDrawable;
         }
     }
 
