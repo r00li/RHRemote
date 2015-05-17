@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,7 +35,7 @@ import java.util.HashMap;
 import com.lukedeighton.wheelview.adapter.*;
 import com.lukedeighton.wheelview.*;
 
-public class RoomControl extends AppCompatActivity {
+public class RoomControl extends AppCompatActivity implements RoomManagerListener {
 
 
     private static final int ITEM_COUNT = 3;
@@ -43,6 +44,9 @@ public class RoomControl extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_control);
+
+        RoomManager.context = this;
+        RoomManager.eventListener = this;
 
         WheelView wheelView = (WheelView) findViewById(R.id.wheelview);
 
@@ -69,8 +73,11 @@ public class RoomControl extends AppCompatActivity {
             public void onWheelItemSelected(WheelView parent, int position) {
                 //get the item at this position
                 Map.Entry<String, Integer> selectedEntry = ((MaterialColorAdapter) parent.getAdapter()).getItem(position);
-                parent.setSelectionColor(getContrastColor(selectedEntry));
+                //parent.setSelectionColor(getContrastColor(selectedEntry));
                 //randomText.setText("izbran " + position);
+
+                Log.d("Selection changed", "New position selected: " + position);
+                RoomManager.updateRoomData(RoomManager.getRoomList().get(0));
             }
         });
 
@@ -92,6 +99,10 @@ public class RoomControl extends AppCompatActivity {
         }
         ListView list = (ListView) findViewById(R.id.listview);
         list.setAdapter(mAdapter);
+    }
+
+    public void roomUpdateComplete(Room r) {
+        Log.d("Room", "Just updated room data");
     }
 
     //get the materials darker contrast
