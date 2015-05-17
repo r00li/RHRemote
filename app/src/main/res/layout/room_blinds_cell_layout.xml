@@ -35,17 +35,20 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="12dp"
-            android:background="#4Dffc719"/>
+            android:background="#4Dffc719"
+            android:id="@+id/blindIndicator2"/>
         <View
             android:layout_marginTop="4dp"
             android:layout_width="match_parent"
             android:layout_height="12dp"
-            android:background="#FFffc719"/>
+            android:background="#FFffc719"
+            android:id="@+id/blindIndicator1"/>
         <View
             android:layout_marginTop="4dp"
             android:layout_width="match_parent"
             android:layout_height="12dp"
-            android:background="#FFffc719"/>
+            android:background="#FFffc719"
+            android:id="@+id/blindIndicator0"/>
         </LinearLayout>
 
     <android.support.v7.widget.AppCompatButton

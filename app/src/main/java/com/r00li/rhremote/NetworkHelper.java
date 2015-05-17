@@ -2,6 +2,7 @@ package com.r00li.rhremote;
 
 import android.content.Context;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -17,7 +18,6 @@ public class NetworkHelper {
     private NetworkHelper(Context context) {
         mCtx = context;
         mRequestQueue = getRequestQueue();
-
     }
 
     public static synchronized NetworkHelper getInstance(Context context) {
@@ -37,6 +37,9 @@ public class NetworkHelper {
     }
 
     public <T> void addToRequestQueue(Request<T> req) {
+        // We need to increase the default timeout because blind requests take longer
+        req.setRetryPolicy(new DefaultRetryPolicy(30*1000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         getRequestQueue().add(req);
     }
 

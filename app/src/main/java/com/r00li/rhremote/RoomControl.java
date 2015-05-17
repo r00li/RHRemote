@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,10 +22,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,12 +42,14 @@ import com.lukedeighton.wheelview.*;
 
 public class RoomControl extends AppCompatActivity implements RoomManagerListener {
 
-
     private static final int ITEM_COUNT = 3;
+
+    private RoomControlAdapter roomControlAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_room_control);
 
         RoomManager.context = this;
@@ -93,16 +100,23 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
 
 
         // ROOM ADAPTER
-        RoomControlAdapter mAdapter = new RoomControlAdapter(this);
-        for (int i = 1; i < 10; i++) {
-            mAdapter.addItem("item " + i);
-        }
+        roomControlAdapter = new RoomControlAdapter(this);
+        Room currentRoom = (RoomManager.getRoomList().size() > 0)? RoomManager.getRoomList().get(0) : null;
+        roomControlAdapter.setRoom(currentRoom);
         ListView list = (ListView) findViewById(R.id.listview);
-        list.setAdapter(mAdapter);
+        list.setAdapter(roomControlAdapter);
     }
 
     public void roomUpdateComplete(Room r) {
         Log.d("Room", "Just updated room data");
+        roomControlAdapter.setRoom(r);
+
+        Runnable run = new Runnable(){
+            public void run(){
+                roomControlAdapter.notifyDataSetChanged();
+            }
+        };
+        this.runOnUiThread(run);
     }
 
     //get the materials darker contrast
@@ -165,12 +179,20 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
 
 class RoomControlAdapter extends BaseAdapter {
     private final Activity context;
-    private ArrayList mData = new ArrayList();
+    private Room room;
     private LayoutInflater mInflater;
 
+    private static final int kTYPE_LIGHT_CELL = 0;
+    private static final int kTYPE_BLIND_CELL = 1;
+
     static class ViewHolder {
-        public TextView text;
+        public TextView name;
         public ImageView image;
+        public SwitchCompat lightSwitch;
+        public View blindIndicator0, blindIndicator1, blindIndicator2;
+        public AppCompatButton blindButtonPlus;
+        public AppCompatButton blindButtonMinus;
+
     }
 
     public RoomControlAdapter(Activity context) {
@@ -178,24 +200,50 @@ class RoomControlAdapter extends BaseAdapter {
         mInflater = context.getLayoutInflater();
     }
 
-    public void addItem(final String item) {
-        mData.add(item);
-        notifyDataSetChanged();
+    public void setRoom(Room r) {
+        room = r;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position > 3)? 1 : 0;
+        if (room != null && room.lights != null && position < room.lights.size()) {
+            return kTYPE_LIGHT_CELL;
+        }
+        else {
+            return kTYPE_BLIND_CELL;
+        }
     }
 
     @Override
     public int getViewTypeCount() {
-        return 2;
+        int typeCount = 0;
+        if (room != null && room.lights != null && room.lights.size() > 0) {
+            typeCount++;
+        }
+
+        if (room != null && room.blinds != null && room.blinds.size() > 0) {
+            typeCount++;
+        }
+
+        if (typeCount == 0) {
+            return 1;
+        }
+
+        return typeCount;
     }
 
     @Override
     public int getCount() {
-        return mData.size();
+        int itemCount = 0;
+        if (room != null && room.lights != null) {
+            itemCount += room.lights.size();
+        }
+
+        if (room != null && room.blinds != null) {
+            itemCount += room.blinds.size();
+        }
+
+        return itemCount;
     }
 
     @Override
@@ -205,48 +253,97 @@ class RoomControlAdapter extends BaseAdapter {
 
     @Override
     public String getItem(int position) {
-        return mData.get(position).toString();
+        return "";
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
-        // reuse views
+
         int type = getItemViewType(position);
-        if (type == 0) {
+        if (type == kTYPE_LIGHT_CELL) {
             if (rowView == null) {
                 LayoutInflater inflater = context.getLayoutInflater();
                 rowView = inflater.inflate(R.layout.room_light_cell_layout, parent, false);
+
                 // configure view holder
                 ViewHolder viewHolder = new ViewHolder();
-                viewHolder.text = (TextView) rowView.findViewById(R.id.textView);
-                viewHolder.image = (ImageView) rowView
-                        .findViewById(R.id.imageView);
+                viewHolder.name = (TextView) rowView.findViewById(R.id.textView);
+                viewHolder.image = (ImageView) rowView.findViewById(R.id.imageView);
+                viewHolder.lightSwitch = (SwitchCompat) rowView.findViewById(R.id.switch1);
                 rowView.setTag(viewHolder);
             }
 
             // fill data
             ViewHolder holder = (ViewHolder) rowView.getTag();
-            String s = mData.get(position).toString();
-            holder.text.setText(s);
+
+            holder.name.setText(room.lights.get(position).name);
+            holder.lightSwitch.setChecked(room.lights.get(position).status != 0);
+
+            // Action listeners
+            final int innerIndex = position;
+            holder.lightSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    RoomManager.modifyLightStatus(room, room.lights.get(innerIndex).id, (isChecked == false)? 0 : 1);
+                }
+            });
         }
         else
         {
             if (rowView == null) {
                 LayoutInflater inflater = context.getLayoutInflater();
                 rowView = inflater.inflate(R.layout.room_blinds_cell_layout, parent, false);
+
                 // configure view holder
                 ViewHolder viewHolder = new ViewHolder();
-                viewHolder.text = (TextView) rowView.findViewById(R.id.textView);
-                viewHolder.image = (ImageView) rowView
-                        .findViewById(R.id.imageView);
+                viewHolder.name = (TextView) rowView.findViewById(R.id.textView);
+                viewHolder.image = (ImageView) rowView.findViewById(R.id.imageView);
+                viewHolder.blindIndicator0 = (View)rowView.findViewById(R.id.blindIndicator0);
+                viewHolder.blindIndicator1 = (View)rowView.findViewById(R.id.blindIndicator1);
+                viewHolder.blindIndicator2 = (View)rowView.findViewById(R.id.blindIndicator2);
+                viewHolder.blindButtonMinus = (AppCompatButton)rowView.findViewById(R.id.blindButtonMinus);
+                viewHolder.blindButtonPlus = (AppCompatButton)rowView.findViewById(R.id.blindButtonPlus);
                 rowView.setTag(viewHolder);
             }
 
             // fill data
+            final int realIndex = position - room.lights.size();
+
             ViewHolder holder = (ViewHolder) rowView.getTag();
-            String s = mData.get(position).toString();
-            holder.text.setText(s);
+            holder.name.setText(room.blinds.get(realIndex).name);
+            holder.blindIndicator2.setBackgroundColor((room.blinds.get(realIndex).status == 2)? 0xFFffc719 : 0x4Dffc719);
+            holder.blindIndicator1.setBackgroundColor((room.blinds.get(realIndex).status == 1)? 0xFFffc719 : 0x4Dffc719);
+            holder.blindIndicator0.setBackgroundColor((room.blinds.get(realIndex).status == 0)? 0xFFffc719 : 0x4Dffc719);
+
+            if (room.blinds.get(realIndex).status == 2) {
+                holder.blindButtonPlus.setEnabled(false);
+            }
+            else {
+                holder.blindButtonPlus.setEnabled(true);
+            }
+
+            if (room.blinds.get(realIndex).status == 0) {
+                holder.blindButtonMinus.setEnabled(false);
+            }
+            else {
+                holder.blindButtonMinus.setEnabled(true);
+            }
+
+            // Action Listeners
+            holder.blindButtonMinus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RoomManager.modifyBlindStatus(room, room.blinds.get(realIndex).id, room.blinds.get(realIndex).status - 1);
+                }
+            });
+
+            holder.blindButtonPlus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RoomManager.modifyBlindStatus(room, room.blinds.get(realIndex).id, room.blinds.get(realIndex).status + 1);
+                }
+            });
         }
 
         return rowView;

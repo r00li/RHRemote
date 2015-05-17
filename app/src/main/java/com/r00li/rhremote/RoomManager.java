@@ -1,5 +1,6 @@
 package com.r00li.rhremote;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
@@ -28,6 +29,7 @@ public class RoomManager {
     private static ArrayList<Room> rooms;
     public static Context context;
     public static RoomManagerListener eventListener;
+    private static ProgressDialog progressDialog;
 
     public static ArrayList<Room> getRoomList() {
         if (rooms == null) {
@@ -42,9 +44,24 @@ public class RoomManager {
         return rooms;
     }
 
-    public static void updateRoomData(final Room room) {
+    public static void modifyLightStatus(Room room, int lightId, int newStatus) {
+        progressDialog = ProgressDialog.show(context, "", "Please wait...");
+        String url = "http://192.168.1.122:8080/user/user/api/lght/" + lightId + "/" + ((newStatus == 0)? "off" : "on");
+        updateRoomData(room, url);
+    }
 
+    public static void modifyBlindStatus(Room room, int blindId, int newStatus) {
+        progressDialog = ProgressDialog.show(context, "", "Please wait...");
+        String url = "http://192.168.1.122:8080/user/user/api/bld/" + blindId + "/" + newStatus;
+        updateRoomData(room, url);
+    }
+
+    public static void updateRoomData(final Room room) {
         String url = "http://192.168.1.122:8080/user/user/api";
+        updateRoomData(room, url);
+    }
+
+    public static void updateRoomData(final Room room, String url) {
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, (String)null, new Response.Listener<JSONObject>() {
 
@@ -58,8 +75,10 @@ public class RoomManager {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Error", error.toString());
-                        // TODO Auto-generated method stub
 
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
                     }
                 });
 
@@ -92,7 +111,7 @@ public class RoomManager {
             for (int i=0; i < blindArray.length(); i++) {
                 Blind blind = new Blind();
 
-                JSONObject jsonBlind = lightArray.getJSONObject(i);
+                JSONObject jsonBlind = blindArray.getJSONObject(i);
                 blind.id = jsonBlind.getInt("id");
                 blind.status = jsonBlind.getInt("status");
                 blind.name = jsonBlind.getString("name");
@@ -107,10 +126,18 @@ public class RoomManager {
 
             if (eventListener != null) {
                 eventListener.roomUpdateComplete(room);
+
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
             }
         }
         catch (JSONException e) {
             Log.e("JSON err", "Error parsing JSON: " + e.toString());
+
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
         }
     }
 
