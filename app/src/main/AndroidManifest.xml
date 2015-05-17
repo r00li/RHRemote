@@ -18,6 +18,7 @@
             android:theme="@style/RhomeTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -30,6 +31,14 @@
             android:label="@string/title_activity_new_room" >
             <intent-filter>
                 <action android:name="novasoba" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".About"
+            android:label="@string/title_activity_about" >
+            <intent-filter>
+                <action android:name="about" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
