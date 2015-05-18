@@ -14,4 +14,38 @@
         <item name="colorButtonNormal">#5db5ff</item>
     </style>
 
+    <style name="RhomeSettings" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#5db5ff</item>
+        <item name="colorPrimaryDark">#0284f0</item>
+        <item name="colorAccent">#ffc719</item>
+        <item name="colorControlNormal">#5db5ff</item>
+        <item name="colorControlActivated">#ffc719</item>
+        <item name="colorSwitchThumbNormal">#5db5ff</item>
+        <item name="colorControlHighlight">#0284f0</item>
+        <item name="android:colorForeground">#5db5ff</item>
+        <item name="colorButtonNormal">#5db5ff</item>
+
+        <item name="android:windowBackground">@color/rhomeBackground</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:editTextColor">#ffffff</item>
+        <item name="android:textColorHint">#ffffff</item>
+        <item name="android:textColorSecondary">#ffffff</item>
+
+        <item name="android:alertDialogTheme">@style/YourAlertDialogTheme</item>
+    </style>
+
+    <style name="YourAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorPrimary">#5db5ff</item>
+        <item name="colorPrimaryDark">#0284f0</item>
+        <item name="colorAccent">#ffc719</item>
+        <item name="colorControlNormal">#5db5ff</item>
+        <item name="colorControlActivated">#ffc719</item>
+        <item name="colorSwitchThumbNormal">#5db5ff</item>
+        <item name="colorControlHighlight">#0284f0</item>
+        <item name="android:colorForeground">#5db5ff</item>
+        <item name="colorButtonNormal">#5db5ff</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
+    </style>
+
 </resources>

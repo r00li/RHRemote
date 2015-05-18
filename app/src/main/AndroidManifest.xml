@@ -24,10 +24,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:theme="@style/RhomeSettings"
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
+            android:theme="@style/RhomeSettings"
             android:name=".NewRoom"
             android:label="@string/title_activity_new_room" >
             <intent-filter>
@@ -36,6 +38,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:theme="@style/RhomeSettings"
             android:name=".About"
             android:label="@string/title_activity_about" >
             <intent-filter>

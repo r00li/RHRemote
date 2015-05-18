@@ -46,18 +46,18 @@ public class RoomManager {
 
     public static void modifyLightStatus(Room room, int lightId, int newStatus) {
         progressDialog = ProgressDialog.show(context, "", "Please wait...");
-        String url = "http://192.168.1.122:8080/user/user/api/lght/" + lightId + "/" + ((newStatus == 0)? "off" : "on");
+        String url = "http://192.168.43.206:8080/user/user/api/lght/" + lightId + "/" + ((newStatus == 0)? "off" : "on");
         updateRoomData(room, url);
     }
 
     public static void modifyBlindStatus(Room room, int blindId, int newStatus) {
         progressDialog = ProgressDialog.show(context, "", "Please wait...");
-        String url = "http://192.168.1.122:8080/user/user/api/bld/" + blindId + "/" + newStatus;
+        String url = "http://192.168.43.206:8080/user/user/api/bld/" + blindId + "/" + newStatus;
         updateRoomData(room, url);
     }
 
     public static void updateRoomData(final Room room) {
-        String url = "http://192.168.1.122:8080/user/user/api";
+        String url = "http://192.168.43.206:8080/user/user/api";
         updateRoomData(room, url);
     }
 
