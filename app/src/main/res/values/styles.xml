@@ -30,8 +30,9 @@
         <item name="android:editTextColor">#ffffff</item>
         <item name="android:textColorHint">#ffffff</item>
         <item name="android:textColorSecondary">#ffffff</item>
-
         <item name="android:alertDialogTheme">@style/YourAlertDialogTheme</item>
+
+
     </style>
 
     <style name="YourAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
@@ -48,4 +49,18 @@
         <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
     </style>
 
+    <style name="spinner" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:spinnerStyle">@style/SpinnerItem</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:background">@color/rhomeBackground</item>
+    </style>
+    <style name="SpinnerItem">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:background">@color/rhomeBackground</item>
+    </style>
+    <style name="SpinnerDropDownItem">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:background">@color/rhomeBackground</item>
+    </style>
 </resources>
