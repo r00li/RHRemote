@@ -13,6 +13,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -32,6 +38,11 @@ public class RoomManager {
     private static ProgressDialog progressDialog;
 
     public static ArrayList<Room> getRoomList() {
+
+        if (rooms == null) {
+            readRoomList();
+        }
+
         if (rooms == null) {
             rooms = new ArrayList<>();
 
@@ -42,6 +53,53 @@ public class RoomManager {
         }
 
         return rooms;
+    }
+
+    public static boolean saveRoomList() {
+        if (rooms == null || rooms.size() == 0) {
+            Log.d("serialization", "No rooms to save");
+            return false;
+        }
+
+        try {
+            FileOutputStream outStream = context.openFileOutput("roomList", Context.MODE_PRIVATE);
+            ObjectOutputStream objectOut = new ObjectOutputStream(outStream);
+            objectOut.writeObject(rooms);
+            objectOut.close();
+            outStream.close();
+
+            Log.d("serialization", "Roomlist saved");
+        }
+        catch (IOException ex) {
+            Log.e("serialization", ex.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean readRoomList() {
+        try {
+            FileInputStream inStream = context.openFileInput("roomList");
+            ObjectInputStream objectInStream = new ObjectInputStream(inStream);
+            rooms = (ArrayList<Room>) objectInStream.readObject();
+
+            Log.d("serialization", "Room list read from file");
+        }
+        catch (IOException ex) {
+            Log.e("serialization", "serialization failed: " + ex.getMessage());
+            rooms = null;
+
+            return false;
+        }
+        catch (ClassNotFoundException ex) {
+            Log.e("Serialization", "Serialization failed because class was not found: " + ex.getMessage());
+            rooms = null;
+
+            return false;
+        }
+
+        return true;
     }
 
     public static void modifyLightStatus(Room room, int lightId, int newStatus) {
@@ -123,6 +181,7 @@ public class RoomManager {
             room.lastUpdate = new Date();
 
             Log.d("Parsing complete", "Rom parsing success." );
+            saveRoomList();
 
             if (eventListener != null) {
                 eventListener.roomUpdateComplete(room);
