@@ -28,6 +28,7 @@ import java.util.Date;
 
 interface RoomManagerListener {
     public void roomUpdateComplete(Room r);
+    public void numberOfRoomsChanged();
 }
 
 public class RoomManager {
@@ -102,6 +103,12 @@ public class RoomManager {
         return true;
     }
 
+    public static void numberOfRoomsChanged() {
+        if (eventListener != null) {
+            eventListener.numberOfRoomsChanged();
+        }
+    }
+
     public static void modifyLightStatus(Room room, int lightId, int newStatus) {
         progressDialog = ProgressDialog.show(context, "", "Please wait...");
         String url = "http://192.168.43.206:8080/user/user/api/lght/" + lightId + "/" + ((newStatus == 0)? "off" : "on");
@@ -115,7 +122,8 @@ public class RoomManager {
     }
 
     public static void updateRoomData(final Room room) {
-        String url = "http://192.168.43.206:8080/user/user/api";
+        //String url = "http://192.168.43.206:8080/user/user/api";
+        String url = "http://r00li.com/downloads/rhsim";
         updateRoomData(room, url);
     }
 

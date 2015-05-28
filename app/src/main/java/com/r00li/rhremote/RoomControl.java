@@ -42,9 +42,9 @@ import com.lukedeighton.wheelview.*;
 
 public class RoomControl extends AppCompatActivity implements RoomManagerListener {
 
-    private static final int ITEM_COUNT = 3;
-
     private RoomControlAdapter roomControlAdapter;
+    private RoomScrollerAdapter roomScrollerAdapter;
+    private WheelView wheelView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,36 +53,20 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
         RoomManager.context = this;
         RoomManager.eventListener = this;
 
-        WheelView wheelView = (WheelView) findViewById(R.id.wheelview);
-
-        HashMap<String, Integer> map = new HashMap<String,Integer>();
-        map.put("Bla", 10);
-        map.put("Trala", 0);
-        List<Map.Entry<String, Integer>> materialColors = new ArrayList<Map.Entry<String, Integer>>();
-        for(Map.Entry<String, Integer> entry : map.entrySet()) {
-            materialColors.add(entry);
-        }
-
-        //create data for the adapter
-        List<Map.Entry<String, Integer>> entries = new ArrayList<Map.Entry<String, Integer>>(ITEM_COUNT);
-        for(int i = 0; i < ITEM_COUNT; i++) {
-            entries.add(materialColors.get(0));
-        }
+        wheelView = (WheelView) findViewById(R.id.wheelview);
 
         //populate the adapter, that knows how to draw each item (as you would do with a ListAdapter)
-        wheelView.setAdapter(new MaterialColorAdapter(entries, this));
+        roomScrollerAdapter = new RoomScrollerAdapter(RoomManager.getRoomList(), this);
+        wheelView.setAdapter(roomScrollerAdapter);
 
         //a listener for receiving a callback for when the item closest to the selection angle changes
         wheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectListener() {
             @Override
             public void onWheelItemSelected(WheelView parent, int position) {
-                //get the item at this position
-                Map.Entry<String, Integer> selectedEntry = ((MaterialColorAdapter) parent.getAdapter()).getItem(position);
-                //parent.setSelectionColor(getContrastColor(selectedEntry));
-                //randomText.setText("izbran " + position);
-
                 Log.d("Selection changed", "New position selected: " + position);
-                RoomManager.updateRoomData(RoomManager.getRoomList().get(0));
+                RoomManager.updateRoomData(RoomManager.getRoomList().get(position));
+                roomControlAdapter.setRoom(RoomManager.getRoomList().get(position));
+                roomControlAdapter.notifyDataSetChanged();
             }
         });
 
@@ -94,7 +78,7 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
         });
 
         //initialise the selection drawable with the first contrast color
-        wheelView.setSelectionColor(getContrastColor(entries.get(0)));
+        wheelView.setSelectionColor(Color.parseColor("#0284f0"));
 
 
         // ROOM ADAPTER
@@ -107,7 +91,7 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
 
     public void roomUpdateComplete(Room r) {
         Log.d("Room", "Just updated room data");
-        roomControlAdapter.setRoom(r);
+        //roomControlAdapter.setRoom(r);
 
         Runnable run = new Runnable(){
             public void run(){
@@ -117,18 +101,45 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
         this.runOnUiThread(run);
     }
 
-    //get the materials darker contrast
-    private int getContrastColor(Map.Entry<String, Integer> entry) {
-        return Color.parseColor("#0284f0");
+    public void numberOfRoomsChanged() {
+        roomScrollerAdapter.setRooms(RoomManager.getRoomList());
+        wheelView.setAdapter(roomScrollerAdapter);
+
+        if (RoomManager.getRoomList().size() > 0) {
+            roomControlAdapter.setRoom(RoomManager.getRoomList().get(0));
+        }
+        else {
+            roomControlAdapter.setRoom(null);
+        }
+
+        Runnable run = new Runnable(){
+            public void run(){
+                roomControlAdapter.notifyDataSetChanged();
+            }
+        };
+        this.runOnUiThread(run);
     }
 
-    static class MaterialColorAdapter extends WheelArrayAdapter<Map.Entry<String, Integer>> {
+    static class RoomScrollerAdapter implements WheelAdapter {
 
         Context context;
+        private ArrayList<Room> rooms;
 
-        MaterialColorAdapter(List<Map.Entry<String, Integer>> entries, Context context) {
-            super(entries);
+        public void setRooms(ArrayList<Room> rooms) {
+            this.rooms = rooms;
+        }
+
+        RoomScrollerAdapter(ArrayList<Room> entries, Context context) {
+            this.rooms = entries;
             this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            if (rooms == null) {
+                return 0;
+            }
+            return rooms.size();
         }
 
         @Override
