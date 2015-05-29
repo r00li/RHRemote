@@ -89,6 +89,12 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
         list.setAdapter(roomControlAdapter);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        RoomManager.saveRoomList();
+    }
+
     public void roomUpdateComplete(Room r) {
         Log.d("Room", "Just updated room data");
         //roomControlAdapter.setRoom(r);

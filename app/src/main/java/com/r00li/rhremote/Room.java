@@ -12,9 +12,10 @@ public class Room implements Serializable {
     // General settings
     public String name;
     public String localURL;
-    public String outisdeURL;
+    public String outside;
     public String username;
     public String password;
+    public int icon;
 
     // API objects
     public ArrayList<Light> lights;

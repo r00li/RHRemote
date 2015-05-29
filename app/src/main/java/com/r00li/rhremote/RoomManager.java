@@ -208,4 +208,18 @@ public class RoomManager {
         }
     }
 
+    public static void ModifyRoomData (int RoomNumber, Room RoomData)
+    {
+        if (RoomNumber==-1)
+            rooms.add(RoomData);
+        else
+            rooms.set(RoomNumber, RoomData);
+        numberOfRoomsChanged();
+    }
+
+    public static void DeleteRoom(int RoomNumber)
+    {
+
+    }
+
 }

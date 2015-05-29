@@ -14,13 +14,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Ime"/>
+            android:text="Room name"/>
         <EditText
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/usrname"
-            android:text="uporabniško ime"/>
+            android:id="@+id/RoomName"
+            android:text="Room name"/>
     </LinearLayout>
 
     <LinearLayout
@@ -32,14 +32,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Geslo"/>
+            android:text="User"/>
+        <EditText
+            android:layout_weight="50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/UserName"
+            android:text="User name"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:layout_weight="30">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="90"
+            android:text="Password"/>
         <EditText
             android:layout_weight="50"
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/pass"
-            android:text="geslo"/>
+            android:id="@+id/Password"
+            android:text="password"/>
     </LinearLayout>
 
     <LinearLayout
@@ -51,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Lokalni IP"/>
+            android:text="Local IP"/>
         <EditText
             android:layout_weight="50"
             android:layout_width="match_parent"
@@ -69,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Lokalni port"/>
+            android:text="Local port"/>
         <EditText
             android:layout_weight="50"
             android:layout_width="match_parent"
@@ -87,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Internetni IP"/>
+            android:text="Internet IP"/>
         <EditText
             android:layout_weight="50"
             android:layout_width="match_parent"
@@ -105,7 +123,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Ikona sobe"/>
+            android:text="Room icon"/>
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -114,11 +132,24 @@
             android:layout_weight="30" />
     </LinearLayout>
 
-
-    <android.support.v7.widget.AppCompatButton
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:layout_weight="30">
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/createroom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="30"
-            android:text="Shrani"/>
-
+            android:text="Create room"
+            android:onClick="onClick"/>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/deleteroom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="80"
+            android:text="Remove"
+            android:onClick="onClick"/>
+    </LinearLayout>
 </LinearLayout>
