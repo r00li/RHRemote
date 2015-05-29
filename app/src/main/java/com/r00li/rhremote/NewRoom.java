@@ -65,12 +65,13 @@ public class NewRoom extends ActionBarActivity {
         LinearLayout.LayoutParams deletePar = new LinearLayout.LayoutParams(deleteroom.getLayoutParams());
         createPar.weight = 0;
         deletePar.weight=80;
+        /*
         roomname.setText("New room name");
         usrname.setText("MyUserName");
         password.setText("password");
         locIP.setText("0.0.0.0");
         locPort.setText("1234");
-        intIP.setText("0.0.0.0");
+        intIP.setText("0.0.0.0");*/
         icon.setSelection(0);
         createroom.setLayoutParams(createPar);
         createroom.setText("Create room");
@@ -87,8 +88,8 @@ public class NewRoom extends ActionBarActivity {
         usrname.setText(room.username);
         password.setText(room.password);
         locIP.setText(room.localURL);
-        locPort.setText("1234");
-        intIP.setText(room.outside);
+        locPort.setText(room.localPort);
+        intIP.setText(room.outsideURL);
         icon.setSelection(room.icon);
         createroom.setLayoutParams(createPar);
         createroom.setText("Update room");
@@ -104,7 +105,8 @@ public class NewRoom extends ActionBarActivity {
                 room.username=(String)usrname.getText().toString();
                 room.password=(String)password.getText().toString();
                 room.localURL=(String)locIP.getText().toString();
-                room.outside =(String)intIP.getText().toString();
+                room.localPort=(String)locPort.getText().toString();
+                room.outsideURL =(String)intIP.getText().toString();
                 //room.icon=(int)icon.getSelectedItemId();
                 RoomManager.ModifyRoomData(roomnumber, room);
             case R.id.deleteroom:

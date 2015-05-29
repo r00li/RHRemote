@@ -28,8 +28,8 @@
         <item name="android:windowBackground">@color/rhomeBackground</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:editTextColor">#ffffff</item>
-        <item name="android:textColorHint">#ffffff</item>
-        <item name="android:textColorSecondary">#ffffff</item>
+        <item name="android:textColorHint">#a6ffffff</item>
+        <item name="android:textColorSecondary">#a6ffffff</item>
         <item name="android:alertDialogTheme">@style/YourAlertDialogTheme</item>
 
 

@@ -1,5 +1,6 @@
 package com.r00li.rhremote;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -67,6 +68,9 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
                 RoomManager.updateRoomData(RoomManager.getRoomList().get(position));
                 roomControlAdapter.setRoom(RoomManager.getRoomList().get(position));
                 roomControlAdapter.notifyDataSetChanged();
+
+                android.support.v7.app.ActionBar ab = getSupportActionBar();
+                ab.setSubtitle("Room: " + RoomManager.getRoomList().get(position).name);
             }
         });
 

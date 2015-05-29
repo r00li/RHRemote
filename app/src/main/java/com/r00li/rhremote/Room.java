@@ -12,7 +12,9 @@ public class Room implements Serializable {
     // General settings
     public String name;
     public String localURL;
-    public String outside;
+    public String localPort;
+    public String outsideURL;
+    public String outsidePort;
     public String username;
     public String password;
     public int icon;
@@ -31,5 +33,13 @@ public class Room implements Serializable {
     Room() {
         this.lights = new ArrayList<>();
         this.blinds = new ArrayList<>();
+
+        this.name = "New room";
+        this.username = "user";
+        this.password = "user";
+        this.localURL = "192.168.1.1";
+        this.localPort = "8080";
+        this.outsideURL = "";
+        this.outsidePort = "";
     }
 }

@@ -2,6 +2,7 @@ package com.r00li.rhremote;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -19,6 +20,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -48,7 +51,6 @@ public class RoomManager {
             rooms = new ArrayList<>();
 
             Room r1 = new Room();
-            r1.name = "Test room";
 
             rooms.add(r1);
         }
@@ -111,19 +113,19 @@ public class RoomManager {
 
     public static void modifyLightStatus(Room room, int lightId, int newStatus) {
         progressDialog = ProgressDialog.show(context, "", "Please wait...");
-        String url = "http://192.168.43.206:8080/user/user/api/lght/" + lightId + "/" + ((newStatus == 0)? "off" : "on");
+        String url = formURLForAPIPath(room, "api/lght/" + lightId + "/" + ((newStatus == 0)? "off" : "on"));
         updateRoomData(room, url);
     }
 
     public static void modifyBlindStatus(Room room, int blindId, int newStatus) {
         progressDialog = ProgressDialog.show(context, "", "Please wait...");
-        String url = "http://192.168.43.206:8080/user/user/api/bld/" + blindId + "/" + newStatus;
+        String url = formURLForAPIPath(room, "api/bld/" + blindId + "/" + newStatus);
         updateRoomData(room, url);
     }
 
     public static void updateRoomData(final Room room) {
-        //String url = "http://192.168.43.206:8080/user/user/api";
-        String url = "http://r00li.com/downloads/rhsim";
+        String url = formURLForAPIPath(room, "api");
+
         updateRoomData(room, url);
     }
 
@@ -211,15 +213,30 @@ public class RoomManager {
     public static void ModifyRoomData (int RoomNumber, Room RoomData)
     {
         if (RoomNumber==-1)
-            rooms.add(RoomData);
+            getRoomList().add(RoomData);
         else
-            rooms.set(RoomNumber, RoomData);
+            getRoomList().set(RoomNumber, RoomData);
         numberOfRoomsChanged();
     }
 
     public static void DeleteRoom(int RoomNumber)
     {
 
+    }
+
+    public static String formURLForAPIPath(Room room, String path) {
+        String url = "";
+        try {
+            // TODO: Uncomment port section
+            URL addres = new URL("http", room.localURL/*, Integer.parseInt(room.localPort)*/, room.username + "/" + room.password + "/" + path);
+            Log.d("url", addres.toString());
+            url = addres.toString();
+        }
+        catch (MalformedURLException ex) {
+            Log.e("url", "Invalid Url" + ex.getMessage());
+        }
+
+        return url;
     }
 
 }
