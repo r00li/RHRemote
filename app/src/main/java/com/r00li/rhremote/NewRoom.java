@@ -26,6 +26,7 @@ public class NewRoom extends ActionBarActivity {
     TextView locIP;
     TextView locPort;
     TextView intIP;
+    TextView intPort;
     Button createroom;
     Button deleteroom;
     Spinner icon;
@@ -44,56 +45,33 @@ public class NewRoom extends ActionBarActivity {
         locIP=(TextView) findViewById(R.id.LklIP);
         locPort=(TextView)findViewById(R.id.LklPort);
         intIP=(TextView)findViewById(R.id.IntIP);
+        intPort=(TextView)findViewById(R.id.IntPort);
         icon=(Spinner)findViewById(R.id.spinner);
         createroom=(Button)findViewById(R.id.createroom);
         deleteroom=(Button)findViewById(R.id.deleteroom);
+        LinearLayout.LayoutParams createPar = new LinearLayout.LayoutParams(createroom.getLayoutParams());
         if (roomnumber==-1)
         {
             room=new Room();
-            newroom();
+            createPar.weight = 0;
+            createroom.setText("Create room");
         }
         else
         {
             room = RoomManager.getRoomList().get(roomnumber);
-            updateroom();
+            createPar.weight = 30;
+            createroom.setText("Update room");
         }
 
-    }
-    private void newroom()
-    {
-        LinearLayout.LayoutParams createPar = new LinearLayout.LayoutParams(createroom.getLayoutParams());
-        LinearLayout.LayoutParams deletePar = new LinearLayout.LayoutParams(deleteroom.getLayoutParams());
-        createPar.weight = 0;
-        deletePar.weight=80;
-        /*
-        roomname.setText("New room name");
-        usrname.setText("MyUserName");
-        password.setText("password");
-        locIP.setText("0.0.0.0");
-        locPort.setText("1234");
-        intIP.setText("0.0.0.0");*/
-        icon.setSelection(0);
-        createroom.setLayoutParams(createPar);
-        createroom.setText("Create room");
-        deleteroom.setLayoutParams(deletePar);
-    }
-
-    private void updateroom()
-    {
-        LinearLayout.LayoutParams createPar = new LinearLayout.LayoutParams(createroom.getLayoutParams());
-        LinearLayout.LayoutParams deletePar = new LinearLayout.LayoutParams(deleteroom.getLayoutParams());
-        createPar.weight = 30;
-        deletePar.weight=80;
         roomname.setText(room.name);
         usrname.setText(room.username);
         password.setText(room.password);
         locIP.setText(room.localURL);
         locPort.setText(room.localPort);
         intIP.setText(room.outsideURL);
+        intPort.setText(room.outsidePort);
         icon.setSelection(room.icon);
         createroom.setLayoutParams(createPar);
-        createroom.setText("Update room");
-        deleteroom.setLayoutParams(deletePar);
     }
 
 
@@ -101,18 +79,19 @@ public class NewRoom extends ActionBarActivity {
         final int id = v.getId();
         switch (id) {
             case R.id.createroom:
-                room.name=(String)roomname.getText().toString();
-                room.username=(String)usrname.getText().toString();
-                room.password=(String)password.getText().toString();
-                room.localURL=(String)locIP.getText().toString();
-                room.localPort=(String)locPort.getText().toString();
-                room.outsideURL =(String)intIP.getText().toString();
-                //room.icon=(int)icon.getSelectedItemId();
+                room.name=roomname.getText().toString();
+                room.username=usrname.getText().toString();
+                room.password=password.getText().toString();
+                room.localURL=locIP.getText().toString();
+                room.localPort=locPort.getText().toString();
+                room.outsideURL =intIP.getText().toString();
+                room.outsidePort=intPort.getText().toString();
+                room.icon=icon.getSelectedItemPosition();
                 RoomManager.ModifyRoomData(roomnumber, room);
+                break;
             case R.id.deleteroom:
                 RoomManager.DeleteRoom(roomnumber);
                 break;
-
         }
         this.finish();
         return;

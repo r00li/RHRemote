@@ -221,7 +221,8 @@ public class RoomManager {
 
     public static void DeleteRoom(int RoomNumber)
     {
-
+        getRoomList().remove(RoomNumber);
+        numberOfRoomsChanged();
     }
 
     public static String formURLForAPIPath(Room room, String path) {
