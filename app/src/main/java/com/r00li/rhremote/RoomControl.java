@@ -47,12 +47,31 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
     private RoomScrollerAdapter roomScrollerAdapter;
     private WheelView wheelView;
 
+    private ProgressBar actionbarProgressBar;
+    private TextView actionbarTitle;
+    private TextView actionbarSubtitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_room_control);
         RoomManager.context = this;
         RoomManager.eventListener = this;
+
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+
+        LayoutInflater mInflater = LayoutInflater.from(this);
+        View mCustomView = mInflater.inflate(R.layout.actionbar_custom, null);
+        getSupportActionBar().setCustomView(mCustomView);
+
+        actionbarProgressBar = (ProgressBar) mCustomView.findViewById(R.id.actionbarProgress);
+        actionbarSubtitle = (TextView) mCustomView.findViewById(R.id.actionbarSubtitle);
+        actionbarTitle = (TextView) mCustomView.findViewById(R.id.actionbarTitle);
+
+        actionbarProgressBar.setVisibility(View.GONE);
 
         wheelView = (WheelView) findViewById(R.id.wheelview);
 
@@ -69,8 +88,7 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
                 roomControlAdapter.setRoom(RoomManager.getRoomList().get(position));
                 roomControlAdapter.notifyDataSetChanged();
 
-                android.support.v7.app.ActionBar ab = getSupportActionBar();
-                ab.setSubtitle("Room: " + RoomManager.getRoomList().get(position).name);
+                actionbarSubtitle.setText("Room: " + RoomManager.getRoomList().get(position).name);
             }
         });
 
