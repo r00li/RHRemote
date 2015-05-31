@@ -2,7 +2,6 @@ package com.r00li.rhremote;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,20 +21,23 @@ import java.util.ArrayList;
 public class NewRoom extends AppCompatActivity {
 
     private static String[] roomNames = {"Bedroom", "Bathroom", "Kitchen", "Living room", "Work room", "Coat room", "Guest room", "Study room"};
+    private static String[] roomColors = {"Light blue", "Light green"};
     private static ArrayList<Integer> iconImages;
+    private static ArrayList<Integer> iconColors;
 
     Room room;
-    TextView roomname;
-    TextView usrname;
+    TextView roomName;
+    TextView username;
     TextView password;
-    TextView locIP;
-    TextView locPort;
-    TextView intIP;
-    TextView intPort;
-    Button createroom;
-    Button deleteroom;
-    Spinner icon;
-    int roomnumber;
+    TextView localIP;
+    TextView localPort;
+    TextView internetIP;
+    TextView internetPort;
+    Button roomCreate;
+    Button roomDelete;
+    Spinner spinnerIcon;
+    Spinner spinnerColor;
+    int roomNumber;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,68 +52,78 @@ public class NewRoom extends AppCompatActivity {
         iconImages.add(R.drawable.ic_guestbedroom);
         iconImages.add(R.drawable.ic_lamp);
 
+        iconColors=new ArrayList<Integer>();
+        iconColors.add(R.drawable.ic_light_blue);
+        iconColors.add(R.drawable.ic_light_green);
+
         setContentView(R.layout.activity_new_room);
-        Spinner mySpinner = (Spinner) findViewById(R.id.spinner);
-        mySpinner.setAdapter(new MyAdapter(NewRoom.this, R.layout.row, roomNames));
+
         Intent intent = getIntent();
-        roomnumber = intent.getIntExtra("soba",0);
-        roomname = (TextView) findViewById(R.id.RoomName);
-        usrname = (TextView) findViewById(R.id.UserName);
-        password=(TextView)findViewById(R.id.Password);
-        locIP=(TextView) findViewById(R.id.LklIP);
-        locPort=(TextView)findViewById(R.id.LklPort);
-        intIP=(TextView)findViewById(R.id.IntIP);
-        intPort=(TextView)findViewById(R.id.IntPort);
-        icon=(Spinner)findViewById(R.id.spinner);
-        createroom=(Button)findViewById(R.id.createroom);
-        deleteroom=(Button)findViewById(R.id.deleteroom);
-        LinearLayout.LayoutParams createPar = new LinearLayout.LayoutParams(createroom.getLayoutParams());
-        if (roomnumber==-1)
+        roomNumber = intent.getIntExtra("room",-1);
+        roomName = (TextView) findViewById(R.id.roomName);
+        username = (TextView) findViewById(R.id.userName);
+        password=(TextView)findViewById(R.id.password);
+        localIP =(TextView) findViewById(R.id.localIP);
+        localPort =(TextView)findViewById(R.id.localPort);
+        internetIP =(TextView)findViewById(R.id.internetIP);
+        internetPort =(TextView)findViewById(R.id.internetPort);
+        spinnerIcon =(Spinner)findViewById(R.id.spinnerIcon);
+        spinnerColor=(Spinner)findViewById(R.id.spinnerColor);
+        roomCreate =(Button)findViewById(R.id.createRoom);
+        roomDelete =(Button)findViewById(R.id.deleteRoom);
+        spinnerIcon.setAdapter(new MyAdapterImages(NewRoom.this, R.layout.row, roomNames));
+        spinnerColor.setAdapter(new MyAdapterColors(NewRoom.this, R.layout.row, roomColors));
+        LinearLayout.LayoutParams createPar = new LinearLayout.LayoutParams(roomCreate.getLayoutParams());
+        if (roomNumber ==-1)
         {
             room=new Room();
             createPar.weight = 0;
-            createroom.setText("Create room");
+            roomCreate.setText("Create room");
         }
         else
         {
-            room = RoomManager.getRoomList().get(roomnumber);
-            createPar.weight = 30;
-            createroom.setText("Update room");
+            room = RoomManager.getRoomList().get(roomNumber);
+            createPar.weight = 35;
+            roomCreate.setText("Update room");
         }
 
-        roomname.setText(room.name);
-        usrname.setText(room.username);
+        roomName.setText(room.name);
+        username.setText(room.username);
         password.setText(room.password);
-        locIP.setText(room.localURL);
-        locPort.setText(room.localPort);
-        intIP.setText(room.outsideURL);
-        icon.setSelection(iconImages.indexOf(room.icon));
-        intPort.setText(room.outsidePort);
-        createroom.setLayoutParams(createPar);
+        localIP.setText(room.localURL);
+        localPort.setText(room.localPort);
+        internetIP.setText(room.outsideURL);
+        spinnerIcon.setSelection(iconImages.indexOf(room.icon));
+        spinnerColor.setSelection(iconColors.indexOf(room.color));
+        internetPort.setText(room.outsidePort);
+        roomCreate.setLayoutParams(createPar);
     }
 
-    public void createRoomClicked(View v) {
-        room.name = roomname.getText().toString();
-        room.username = usrname.getText().toString();
-        room.password = password.getText().toString();
-        room.localURL = locIP.getText().toString();
-        room.localPort = locPort.getText().toString();
-        room.outsideURL = intIP.getText().toString();
-        room.icon = iconImages.get(icon.getSelectedItemPosition());
-        RoomManager.ModifyRoomData(roomnumber, room);
 
+    public void createRoomClicked(View v) {
+        Log.d("settings","onClickCreate");
+        room.name = roomName.getText().toString();
+        room.username = username.getText().toString();
+        room.password = password.getText().toString();
+        room.localURL = localIP.getText().toString();
+        room.localPort = localPort.getText().toString();
+        room.outsideURL = internetIP.getText().toString();
+        room.outsidePort=internetPort.getText().toString();
+        room.icon = iconImages.get(spinnerIcon.getSelectedItemPosition());
+        room.color = iconColors.get(spinnerColor.getSelectedItemPosition());
+        RoomManager.ModifyRoomData(roomNumber, room);
         this.finish();
     }
 
     public void deleteRoomClicked(View v) {
-        RoomManager.DeleteRoom(roomnumber);
-
+        Log.d("settings","onClickDelete");
+        RoomManager.DeleteRoom(roomNumber);
         this.finish();
     }
 
-    public class MyAdapter extends ArrayAdapter<String> {
+    public class MyAdapterImages extends ArrayAdapter<String>  {
 
-        public MyAdapter(Context context, int textViewResourceId, String[] objects) {
+        public MyAdapterImages(Context context, int textViewResourceId, String[] objects) {
             super(context, textViewResourceId, objects);
         }
 
@@ -136,4 +148,34 @@ public class NewRoom extends AppCompatActivity {
             return row;
         }
     }
+
+    public class MyAdapterColors extends ArrayAdapter<String>  {
+
+        public MyAdapterColors(Context context, int textViewResourceId, String[] objects) {
+            super(context, textViewResourceId, objects);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        public View getCustomView(int position, View convertView, ViewGroup parent) {
+
+            LayoutInflater inflater = getLayoutInflater();
+            View row = inflater.inflate(R.layout.row, parent, false);
+
+            ImageView icon = (ImageView) row.findViewById(R.id.image);
+            icon.setImageResource(iconColors.get(position));
+
+            return row;
+        }
+    }
+
+
 }

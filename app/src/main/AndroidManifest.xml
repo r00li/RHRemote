@@ -33,7 +33,7 @@
             android:name=".NewRoom"
             android:label="@string/title_activity_new_room" >
             <intent-filter>
-                <action android:name="novasoba" />
+                <action android:name="newRoom" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

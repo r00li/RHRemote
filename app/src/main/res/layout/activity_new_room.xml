@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,8 +20,9 @@
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/RoomName"
-            android:hint="Room name"/>
+            android:id="@+id/roomName"
+            android:hint="Room name"
+            style="@style/RhomeSettings"/>
     </LinearLayout>
 
     <LinearLayout
@@ -37,8 +39,9 @@
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/UserName"
-            android:hint="User name"/>
+            android:id="@+id/userName"
+            android:hint="User name"
+            style="@style/RhomeSettings"/>
     </LinearLayout>
 
     <LinearLayout
@@ -56,8 +59,9 @@
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/Password"
-            android:hint="password"/>
+            android:id="@+id/password"
+            android:hint="password"
+            style="@style/RhomeSettings"/>
     </LinearLayout>
 
     <LinearLayout
@@ -74,8 +78,9 @@
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/LklIP"
-            android:hint="192.168.1.1"/>
+            android:id="@+id/localIP"
+            android:hint="192.168.1.1"
+            style="@style/RhomeSettings"/>
     </LinearLayout>
 
     <LinearLayout
@@ -92,8 +97,9 @@
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/LklPort"
-            android:hint="8080"/>
+            android:id="@+id/localPort"
+            android:hint="8080"
+            style="@style/RhomeSettings"/>
     </LinearLayout>
 
     <LinearLayout
@@ -110,8 +116,9 @@
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/IntIP"
-            android:hint="192.168.1.1"/>
+            android:id="@+id/internetIP"
+            android:hint="192.168.1.1"
+            style="@style/RhomeSettings"/>
     </LinearLayout>
 
     <LinearLayout
@@ -128,8 +135,9 @@
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/IntPort"
-            android:hint="8080"/>
+            android:id="@+id/internetPort"
+            android:hint="8080"
+            style="@style/RhomeSettings"/>
     </LinearLayout>
 
     <LinearLayout
@@ -140,12 +148,18 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="90"
+            android:layout_weight="65"
             android:text="Room icon"/>
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner"
+            android:id="@+id/spinnerIcon"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="50" />
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerColor"
             android:layout_gravity="center_horizontal"
             android:layout_weight="50" />
     </LinearLayout>
@@ -158,18 +172,18 @@
         android:layout_height="match_parent"
         android:layout_weight="30">
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/createroom"
+            android:id="@+id/createRoom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="30"
             android:text="Create room"
-            android:onClick="createRoomClicked"/>
+            android:onClick="createRoomClicked" />
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/deleteroom"
+            android:id="@+id/deleteRoom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="80"
             android:text="Remove"
-            android:onClick="deleteRoomClicked"/>
+            android:onClick="deleteRoomClicked" />
     </LinearLayout>
 </LinearLayout>

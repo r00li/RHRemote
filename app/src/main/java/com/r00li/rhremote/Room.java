@@ -18,6 +18,7 @@ public class Room implements Serializable {
     public String username;
     public String password;
     public int icon;
+    public int color;
 
     // API objects
     public ArrayList<Light> lights;
@@ -42,5 +43,6 @@ public class Room implements Serializable {
         this.outsideURL = "";
         this.outsidePort = "";
         this.icon = -1;
+        this.color = -1;
     }
 }

@@ -6,11 +6,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +15,7 @@ import java.util.List;
 public class SettingsActivity extends PreferenceActivity  {
     // cache rooms to display them
     private  ArrayList<Room> rooms;
-    private static int firsttime=0;
+    private static int firstTime =0;
     // cache the Preference we create in this list so we can remove and add them later
     private List<Preference> mPreferenceList = new ArrayList<>();
     private static PreferenceScreen mRoot;
@@ -28,8 +24,8 @@ public class SettingsActivity extends PreferenceActivity  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        if(firsttime==0) {
-            firsttime=1;
+        if(firstTime ==0) {
+            firstTime =1;
             mRoot = getPreferenceManager().createPreferenceScreen(this);
             setGlobalSettings();
 
@@ -39,42 +35,40 @@ public class SettingsActivity extends PreferenceActivity  {
 
     @Override
     public void onResume() {
-        super.onResume();  // Always call the superclass method first
-        getPreferencesFromArray();
-        // Get the Camera instance as the activity achieves full user focus
-
+        super.onResume();
+        getPreferencesFromArray(); //refresh rooms category
     }
 
     private void setGlobalSettings()
     {
         PreferenceCategory preferenceCategorySettings = new PreferenceCategory(this);
-        preferenceCategorySettings.setKey("Settings");
+        preferenceCategorySettings.setKey("settings");
         preferenceCategorySettings.setTitle("Settings");
         mRoot.addPreference(preferenceCategorySettings);
 
-        EditTextPreference InternetIP = new EditTextPreference(this);
-        InternetIP.setKey("InternetIP");
-        InternetIP.setTitle("Internet IP");
-        InternetIP.setSummary("Internet IP");
-        InternetIP.setDefaultValue("0.0.0.0");
-        preferenceCategorySettings.addPreference(InternetIP);
+        EditTextPreference internetIP = new EditTextPreference(this);
+        internetIP.setKey("internetIP");
+        internetIP.setTitle("Internet IP");
+        internetIP.setSummary("Internet IP");
+        internetIP.setDefaultValue("0.0.0.0");
+        preferenceCategorySettings.addPreference(internetIP);
 
-        EditTextPreference SSID=new EditTextPreference(this);
-        SSID.setKey("SSID");
-        SSID.setTitle("SSID");
-        SSID.setSummary("SSID");
-        SSID.setDefaultValue("SSID");
-        preferenceCategorySettings.addPreference(SSID);
+        EditTextPreference ssid=new EditTextPreference(this);
+        ssid.setKey("ssid");
+        ssid.setTitle("SSID");
+        ssid.setSummary("SSID");
+        ssid.setDefaultValue("SSID");
+        preferenceCategorySettings.addPreference(ssid);
 
-        Preference NRoom=new Preference(this);
-        NRoom.setKey("NewRoom");
-        NRoom.setTitle("Add room");
-        NRoom.setSummary("Add new room");
-        preferenceCategorySettings.addPreference(NRoom);
+        Preference nRoom =new Preference(this);
+        nRoom.setKey("newRoom");
+        nRoom.setTitle("Add room");
+        nRoom.setSummary("Add new room");
+        preferenceCategorySettings.addPreference(nRoom);
         Intent SetNewRoom= new Intent();
-        SetNewRoom.setAction("novasoba");
-        SetNewRoom.putExtra("soba", -1);
-        NRoom.setIntent(SetNewRoom);
+        SetNewRoom.setAction("newRoom");
+        SetNewRoom.putExtra("room", -1);
+        nRoom.setIntent(SetNewRoom);
 
         Preference about=new Preference(this);
         about.setKey("about");
@@ -86,7 +80,7 @@ public class SettingsActivity extends PreferenceActivity  {
         about.setIntent(aboutS);
 
         preferenceCategoryRooms = new PreferenceCategory(this);
-        preferenceCategoryRooms.setKey("Rooms");
+        preferenceCategoryRooms.setKey("rooms");
         preferenceCategoryRooms.setTitle("Rooms");
         mRoot.addPreference(preferenceCategoryRooms);
     }
@@ -97,16 +91,16 @@ public class SettingsActivity extends PreferenceActivity  {
         rooms=RoomManager.getRoomList();
         for(Room room :rooms)
         {
-            Preference TRoom=new Preference(this);
-            TRoom.setKey("NewRoom");
-            TRoom.setTitle(room.name);
-            TRoom.setSummary("Room settings");
-            preferenceCategoryRooms.addPreference(TRoom);
+            Preference tRoom =new Preference(this);
+            tRoom.setKey("room" + Integer.toString(i));
+            tRoom.setTitle(room.name);
+            tRoom.setSummary("Room settings");
+            preferenceCategoryRooms.addPreference(tRoom);
             Intent SetNewRoom= new Intent();
-            SetNewRoom.setAction("novasoba");
-            SetNewRoom.putExtra("soba", i);
-            TRoom.setIntent(SetNewRoom);
-            mPreferenceList.add(TRoom);
+            SetNewRoom.setAction("newRoom");
+            SetNewRoom.putExtra("room", i);
+            tRoom.setIntent(SetNewRoom);
+            mPreferenceList.add(tRoom);
             i++;
         }
         setPreferenceScreen(mRoot);

@@ -24,6 +24,7 @@
         <item name="colorControlHighlight">#0284f0</item>
         <item name="android:colorForeground">#5db5ff</item>
         <item name="colorButtonNormal">#5db5ff</item>
+        <item name="android:editTextStyle">@style/RHomeEditTextStyle</item>
 
         <item name="android:windowBackground">@color/rhomeBackground</item>
         <item name="android:textColor">#ffffff</item>
@@ -31,7 +32,6 @@
         <item name="android:textColorHint">#a6ffffff</item>
         <item name="android:textColorSecondary">#a6ffffff</item>
         <item name="android:alertDialogTheme">@style/YourAlertDialogTheme</item>
-
 
     </style>
 
@@ -63,4 +63,9 @@
         <item name="android:textColor">#ffffff</item>
         <item name="android:background">@color/rhomeBackground</item>
     </style>
+
+    <style name="RHomeEditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
 </resources>
