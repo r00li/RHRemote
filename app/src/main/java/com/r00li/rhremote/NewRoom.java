@@ -2,6 +2,7 @@ package com.r00li.rhremote;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 public class NewRoom extends AppCompatActivity {
 
     private static String[] roomNames = {"Bedroom", "Bathroom", "Kitchen", "Living room", "Work room", "Coat room", "Guest room", "Study room"};
-    private static String[] roomColors = {"Light blue", "Light green"};
+    private static String[] roomColors = {"1", "2", "3", "4", "5", "6"};
     private static ArrayList<Integer> iconImages;
     private static ArrayList<Integer> iconColors;
 
@@ -53,8 +54,12 @@ public class NewRoom extends AppCompatActivity {
         iconImages.add(R.drawable.ic_lamp);
 
         iconColors=new ArrayList<Integer>();
-        iconColors.add(R.drawable.ic_light_blue);
-        iconColors.add(R.drawable.ic_light_green);
+        iconColors.add(0xfff86a69);
+        iconColors.add(0xff56d882);
+        iconColors.add(0xfff08e4d);
+        iconColors.add(0xffecc961);
+        iconColors.add(0xffa04e7e);
+        iconColors.add(0xff22c7c1);
 
         setContentView(R.layout.activity_new_room);
 
@@ -85,17 +90,18 @@ public class NewRoom extends AppCompatActivity {
             room = RoomManager.getRoomList().get(roomNumber);
             createPar.weight = 35;
             roomCreate.setText("Update room");
+
+            roomName.setText(room.name);
+            username.setText(room.username);
+            password.setText(room.password);
+            localIP.setText(room.localURL);
+            localPort.setText(room.localPort);
+            internetIP.setText(room.outsideURL);
+            spinnerIcon.setSelection(iconImages.indexOf(room.icon));
+            spinnerColor.setSelection(iconColors.indexOf(room.color));
+            internetPort.setText(room.outsidePort);
         }
 
-        roomName.setText(room.name);
-        username.setText(room.username);
-        password.setText(room.password);
-        localIP.setText(room.localURL);
-        localPort.setText(room.localPort);
-        internetIP.setText(room.outsideURL);
-        spinnerIcon.setSelection(iconImages.indexOf(room.icon));
-        spinnerColor.setSelection(iconColors.indexOf(room.color));
-        internetPort.setText(room.outsidePort);
         roomCreate.setLayoutParams(createPar);
     }
 
@@ -171,7 +177,8 @@ public class NewRoom extends AppCompatActivity {
             View row = inflater.inflate(R.layout.row, parent, false);
 
             ImageView icon = (ImageView) row.findViewById(R.id.image);
-            icon.setImageResource(iconColors.get(position));
+            //icon.setImageResource();
+            icon.setImageDrawable(new ColorDrawable(iconColors.get(position)));
 
             return row;
         }

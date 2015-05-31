@@ -217,9 +217,9 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
         public Drawable getDrawable(int position) {
             TextDrawable bottomLayer;
             if (rooms.get(position).icon == -1)
-                bottomLayer = new TextDrawable("" + position, context.getResources().getDrawable(R.drawable.ic_bed), context);
+                bottomLayer = new TextDrawable("" + position, context.getResources().getDrawable(R.drawable.ic_bed), context, rooms.get(position).color);
             else
-                bottomLayer = new TextDrawable("" + position, context.getResources().getDrawable(rooms.get(position).icon), context);
+                bottomLayer = new TextDrawable("" + position, context.getResources().getDrawable(rooms.get(position).icon), context, rooms.get(position).color);
             return bottomLayer;
         }
 

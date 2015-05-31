@@ -148,20 +148,20 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="65"
+            android:layout_weight="90"
             android:text="Room icon"/>
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spinnerIcon"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="50" />
+            android:layout_weight="90" />
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spinnerColor"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="50" />
+            android:layout_weight="90" />
     </LinearLayout>
 
 

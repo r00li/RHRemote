@@ -20,12 +20,14 @@ public class TextDrawable extends Drawable {
     private final Drawable icon;
     private Context context;
     private boolean selected;
+    public int color;
 
-    public TextDrawable(String text, Drawable icon, Context context) {
+    public TextDrawable(String text, Drawable icon, Context context, int color) {
 
         this.text = text;
         this.context = context;
         this.icon = icon;
+        this.color = color;
 
         this.paint = new Paint();
         paint.setColor(Color.WHITE);
@@ -43,7 +45,7 @@ public class TextDrawable extends Drawable {
         if (selected)
             circlePaint.setColor(0x0284f09);
         else
-            circlePaint.setColor(0xFFffc719);
+            circlePaint.setColor(color);
         circlePaint.setAntiAlias(true);
         circlePaint.setStyle(Paint.Style.FILL);
         circlePaint.setStrokeWidth(3);
