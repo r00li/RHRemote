@@ -2,7 +2,11 @@ package com.r00li.rhremote;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -51,10 +55,6 @@ public class RoomManager {
 
         if (rooms == null) {
             rooms = new ArrayList<>();
-
-            Room r1 = new Room();
-
-            rooms.add(r1);
         }
 
         return rooms;
@@ -136,6 +136,10 @@ public class RoomManager {
     }
 
     public static void updateRoomData(final Room room, String url) {
+
+        if (url.length() < 1) {
+            return;
+        }
 
         if (eventListener != null) {
             eventListener.roomUpdateStarted(room);
@@ -253,11 +257,34 @@ public class RoomManager {
     }
 
     public static String formURLForAPIPath(Room room, String path) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        String savedSSID = sharedPref.getString("SSID", "");
+
+        WifiManager wifiManager = (WifiManager) context.getSystemService(context.WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        String currentSSID = wifiInfo.getSSID();
+        if (currentSSID.startsWith("\"") && currentSSID.endsWith("\"")){
+            // Android 4.2 and later puts extra " " around SSID name returned - remove them
+            currentSSID = currentSSID.substring(1, currentSSID.length()-1);
+        }
+
         String url = "";
         try {
-            // TODO: Uncomment port section
-            URL addres = new URL("http", room.localURL/*, Integer.parseInt(room.localPort)*/, room.username + "/" + room.password + "/" + path);
-            url = addres.toString();
+            if (savedSSID.equals(currentSSID)) {
+                // TODO: Uncomment port section
+                URL address = new URL("http", room.localURL/*, Integer.parseInt(room.localPort)*/, room.username + "/" + room.password + "/" + path);
+                url = address.toString();
+            }
+            else {
+                Log.d("url", "Using external room URL (current SSID: " + currentSSID + ", saved SSID: " + savedSSID + ")");
+                if (room.outsideURL.length() > 0 && room.outsidePort.length() > 0) {
+                    URL address = new URL("http", room.outsideURL, Integer.parseInt(room.outsidePort), room.username + "/" + room.password + "/" + path);
+                    url = address.toString();
+                }
+                else {
+                    NotificationManager.showToastMessage("Error connecting! You are not in the same network as your room and you haven't provided an external URL!");
+                }
+            }
         }
         catch (MalformedURLException ex) {
             Log.e("url", "Invalid Url" + ex.getMessage());

@@ -5,7 +5,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -120,6 +124,11 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
         ListView list = (ListView) findViewById(R.id.listview);
         list.setAdapter(roomControlAdapter);
 
+        TextView emptyRow = (TextView) findViewById(R.id.emptyView);
+        list.setEmptyView(emptyRow);
+
+
+        // Update data for first room when loading is done
         if (roomControlAdapter.getRoom() != null) {
             RoomManager.updateRoomData(roomControlAdapter.getRoom());
             actionbarSubtitle.setText("Room: " + roomControlAdapter.getRoom().name);
