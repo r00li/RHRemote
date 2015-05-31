@@ -77,16 +77,17 @@ public class NewRoom extends AppCompatActivity {
             room = RoomManager.getRoomList().get(roomnumber);
             createPar.weight = 30;
             createroom.setText("Update room");
+
+            roomname.setText(room.name);
+            usrname.setText(room.username);
+            password.setText(room.password);
+            locIP.setText(room.localURL);
+            locPort.setText(room.localPort);
+            intIP.setText(room.outsideURL);
+            icon.setSelection(iconImages.indexOf(room.icon));
+            intPort.setText(room.outsidePort);
         }
 
-        roomname.setText(room.name);
-        usrname.setText(room.username);
-        password.setText(room.password);
-        locIP.setText(room.localURL);
-        locPort.setText(room.localPort);
-        intIP.setText(room.outsideURL);
-        icon.setSelection(iconImages.indexOf(room.icon));
-        intPort.setText(room.outsidePort);
         createroom.setLayoutParams(createPar);
     }
 
@@ -97,6 +98,7 @@ public class NewRoom extends AppCompatActivity {
         room.localURL = locIP.getText().toString();
         room.localPort = locPort.getText().toString();
         room.outsideURL = intIP.getText().toString();
+        room.outsidePort = intPort.getText().toString();
         room.icon = iconImages.get(icon.getSelectedItemPosition());
         RoomManager.ModifyRoomData(roomnumber, room);
 

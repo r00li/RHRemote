@@ -52,18 +52,11 @@ public class SettingsActivity extends PreferenceActivity  {
         preferenceCategorySettings.setTitle("Settings");
         mRoot.addPreference(preferenceCategorySettings);
 
-        EditTextPreference InternetIP = new EditTextPreference(this);
-        InternetIP.setKey("InternetIP");
-        InternetIP.setTitle("Internet IP");
-        InternetIP.setSummary("Internet IP");
-        InternetIP.setDefaultValue("0.0.0.0");
-        preferenceCategorySettings.addPreference(InternetIP);
-
         EditTextPreference SSID=new EditTextPreference(this);
         SSID.setKey("SSID");
         SSID.setTitle("SSID");
-        SSID.setSummary("SSID");
-        SSID.setDefaultValue("SSID");
+        SSID.setSummary("SSID of the network where your rooms are connected.");
+        SSID.setDefaultValue("");
         preferenceCategorySettings.addPreference(SSID);
 
         Preference NRoom=new Preference(this);
