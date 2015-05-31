@@ -56,6 +56,9 @@ public class Circle {
         if (value < 0) {
             return value + (-1 * (int) Math.floor(value / (float) upperLimit)) * upperLimit;
         } else {
+            if (upperLimit == 0)
+                return 0;
+
             return value % upperLimit;
         }
     }

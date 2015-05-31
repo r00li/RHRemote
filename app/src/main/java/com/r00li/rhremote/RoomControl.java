@@ -2,6 +2,7 @@ package com.r00li.rhremote;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -33,6 +34,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,14 +52,17 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
     private ProgressBar actionbarProgressBar;
     private TextView actionbarTitle;
     private TextView actionbarSubtitle;
+    private ImageView actionBarImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_room_control);
+
         RoomManager.context = this;
         RoomManager.eventListener = this;
+        NotificationManager.context = this;
 
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -70,6 +75,7 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
         actionbarProgressBar = (ProgressBar) mCustomView.findViewById(R.id.actionbarProgress);
         actionbarSubtitle = (TextView) mCustomView.findViewById(R.id.actionbarSubtitle);
         actionbarTitle = (TextView) mCustomView.findViewById(R.id.actionbarTitle);
+        actionBarImageView = (ImageView) mCustomView.findViewById(R.id.actionbarIcon);
 
         actionbarProgressBar.setVisibility(View.GONE);
 
@@ -84,6 +90,10 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
             @Override
             public void onWheelItemSelected(WheelView parent, int position) {
                 Log.d("Selection changed", "New position selected: " + position);
+                if (RoomManager.getRoomList().size() == 0) {
+                    return;
+                }
+
                 RoomManager.updateRoomData(RoomManager.getRoomList().get(position));
                 roomControlAdapter.setRoom(RoomManager.getRoomList().get(position));
                 roomControlAdapter.notifyDataSetChanged();
@@ -109,6 +119,11 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
         roomControlAdapter.setRoom(currentRoom);
         ListView list = (ListView) findViewById(R.id.listview);
         list.setAdapter(roomControlAdapter);
+
+        if (roomControlAdapter.getRoom() != null) {
+            RoomManager.updateRoomData(roomControlAdapter.getRoom());
+            actionbarSubtitle.setText("Room: " + roomControlAdapter.getRoom().name);
+        }
     }
 
     @Override
@@ -117,7 +132,20 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
         RoomManager.saveRoomList();
     }
 
+    public void roomUpdateStarted(Room r) {
+        actionbarProgressBar.setVisibility(View.VISIBLE);
+        actionBarImageView.setVisibility(View.GONE);
+    }
+
+    public void roomUpdateFailed(Room r) {
+        actionbarProgressBar.setVisibility(View.GONE);
+        actionBarImageView.setVisibility(View.VISIBLE);
+    }
+
     public void roomUpdateComplete(Room r) {
+        actionbarProgressBar.setVisibility(View.GONE);
+        actionBarImageView.setVisibility(View.VISIBLE);
+
         Log.d("Room", "Just updated room data");
         //roomControlAdapter.setRoom(r);
 
@@ -135,9 +163,11 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
 
         if (RoomManager.getRoomList().size() > 0) {
             roomControlAdapter.setRoom(RoomManager.getRoomList().get(0));
+            actionbarSubtitle.setText("Room: " + roomControlAdapter.getRoom().name);
         }
         else {
             roomControlAdapter.setRoom(null);
+            actionbarSubtitle.setText("");
         }
 
         Runnable run = new Runnable(){
@@ -146,6 +176,10 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
             }
         };
         this.runOnUiThread(run);
+    }
+
+    public void refreshIconClicked(MenuItem item) {
+        RoomManager.updateRoomData(roomControlAdapter.getRoom());
     }
 
     static class RoomScrollerAdapter implements WheelAdapter {
@@ -173,10 +207,10 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
         @Override
         public Drawable getDrawable(int position) {
             TextDrawable bottomLayer;
-            if (position == 0)
-                bottomLayer = new TextDrawable("" + position, context.getResources().getDrawable(R.drawable.ic_shower), context);
-            else
+            if (rooms.get(position).icon == -1)
                 bottomLayer = new TextDrawable("" + position, context.getResources().getDrawable(R.drawable.ic_bed), context);
+            else
+                bottomLayer = new TextDrawable("" + position, context.getResources().getDrawable(rooms.get(position).icon), context);
             return bottomLayer;
         }
 
@@ -211,7 +245,6 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
 
         return super.onOptionsItemSelected(item);
     }
-
 }
 
 class RoomControlAdapter extends BaseAdapter {
@@ -221,15 +254,16 @@ class RoomControlAdapter extends BaseAdapter {
 
     private static final int kTYPE_LIGHT_CELL = 0;
     private static final int kTYPE_BLIND_CELL = 1;
+    private static final int kTYPE_INFO_CELL = 2;
 
     static class ViewHolder {
         public TextView name;
+        public TextView subtitle;
         public ImageView image;
         public SwitchCompat lightSwitch;
         public View blindIndicator0, blindIndicator1, blindIndicator2;
         public AppCompatButton blindButtonPlus;
         public AppCompatButton blindButtonMinus;
-
     }
 
     public RoomControlAdapter(Activity context) {
@@ -240,14 +274,24 @@ class RoomControlAdapter extends BaseAdapter {
     public void setRoom(Room r) {
         room = r;
     }
+    public Room getRoom() {
+        return room;
+    }
 
     @Override
     public int getItemViewType(int position) {
-        if (room != null && room.lights != null && position < room.lights.size()) {
+
+        int lightCells = (room != null && room.lights != null) ? room.lights.size() : 0;
+        int blindCells = (room != null && room.blinds != null) ? room.blinds.size() : 0;
+
+        if (position < lightCells) {
             return kTYPE_LIGHT_CELL;
         }
-        else {
+        else if (position >= lightCells && position < lightCells + blindCells) {
             return kTYPE_BLIND_CELL;
+        }
+        else {
+            return kTYPE_INFO_CELL;
         }
     }
 
@@ -262,9 +306,8 @@ class RoomControlAdapter extends BaseAdapter {
             typeCount++;
         }
 
-        if (typeCount == 0) {
-            return 1;
-        }
+        // Other info cell
+        typeCount++;
 
         return typeCount;
     }
@@ -278,6 +321,11 @@ class RoomControlAdapter extends BaseAdapter {
 
         if (room != null && room.blinds != null) {
             itemCount += room.blinds.size();
+        }
+
+        if (room != null) {
+            // Other info cell
+            itemCount++;
         }
 
         return itemCount;
@@ -299,7 +347,7 @@ class RoomControlAdapter extends BaseAdapter {
 
         int type = getItemViewType(position);
         if (type == kTYPE_LIGHT_CELL) {
-            if (rowView == null) {
+            if (rowView == null || rowView.getId() != R.id.light_cell) {
                 LayoutInflater inflater = context.getLayoutInflater();
                 rowView = inflater.inflate(R.layout.room_light_cell_layout, parent, false);
 
@@ -326,9 +374,9 @@ class RoomControlAdapter extends BaseAdapter {
                 }
             });
         }
-        else
+        else if (type == kTYPE_BLIND_CELL)
         {
-            if (rowView == null) {
+            if (rowView == null || rowView.getId() != R.id.blinds_cell) {
                 LayoutInflater inflater = context.getLayoutInflater();
                 rowView = inflater.inflate(R.layout.room_blinds_cell_layout, parent, false);
 
@@ -381,6 +429,32 @@ class RoomControlAdapter extends BaseAdapter {
                     RoomManager.modifyBlindStatus(room, room.blinds.get(realIndex).id, room.blinds.get(realIndex).status + 1);
                 }
             });
+        }
+        else {
+            if (rowView == null || rowView.getId() != R.id.info_cell) {
+                LayoutInflater inflater = context.getLayoutInflater();
+                rowView = inflater.inflate(R.layout.room_info_cell_layout, parent, false);
+
+                // configure view holder
+                ViewHolder viewHolder = new ViewHolder();
+                viewHolder.name = (TextView) rowView.findViewById(R.id.textView);
+                viewHolder.subtitle = (TextView) rowView.findViewById(R.id.infoTextView);
+                viewHolder.image = (ImageView) rowView.findViewById(R.id.imageView);
+                rowView.setTag(viewHolder);
+            }
+
+            // fill data
+            ViewHolder holder = (ViewHolder) rowView.getTag();
+
+            holder.name.setText("Temperature: " + Math.round(room.temperature) + "°C");
+
+            if (room.lastUpdate != null) {
+                DateFormat formatter = DateFormat.getTimeInstance(DateFormat.MEDIUM);
+                holder.subtitle.setText("Last updated: " + formatter.format(room.lastUpdate));
+            }
+            else {
+                holder.subtitle.setText("Last updated: Never");
+            }
         }
 
         return rowView;

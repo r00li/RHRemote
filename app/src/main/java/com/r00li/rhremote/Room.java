@@ -41,5 +41,6 @@ public class Room implements Serializable {
         this.localPort = "8080";
         this.outsideURL = "";
         this.outsidePort = "";
+        this.icon = -1;
     }
 }

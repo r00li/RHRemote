@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 
-public class NewRoom extends ActionBarActivity {
-    String[] roomnames = {"Room", "Bathroom", "Kitchen"};
-    int arr_images[] = {R.drawable.ic_bed, R.drawable.ic_shower, R.drawable.ic_bulb_vec};
+
+public class NewRoom extends AppCompatActivity {
+
+    private static String[] roomNames = {"Bedroom", "Bathroom", "Kitchen", "Living room", "Work room", "Coat room", "Guest room", "Study room"};
+    private static ArrayList<Integer> iconImages;
+
     Room room;
     TextView roomname;
     TextView usrname;
@@ -30,12 +35,23 @@ public class NewRoom extends ActionBarActivity {
     Button deleteroom;
     Spinner icon;
     int roomnumber;
-    protected void onCreate(Bundle savedInstanceState) {
 
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        iconImages = new ArrayList<Integer>();
+        iconImages.add(R.drawable.ic_bed);
+        iconImages.add(R.drawable.ic_shower);
+        iconImages.add(R.drawable.ic_table);
+        iconImages.add(R.drawable.ic_couch);
+        iconImages.add(R.drawable.ic_desk);
+        iconImages.add(R.drawable.ic_coathanger);
+        iconImages.add(R.drawable.ic_guestbedroom);
+        iconImages.add(R.drawable.ic_lamp);
+
         setContentView(R.layout.activity_new_room);
         Spinner mySpinner = (Spinner) findViewById(R.id.spinner);
-        mySpinner.setAdapter(new MyAdapter(NewRoom.this, R.layout.row, roomnames));
+        mySpinner.setAdapter(new MyAdapter(NewRoom.this, R.layout.row, roomNames));
         Intent intent = getIntent();
         roomnumber = intent.getIntExtra("soba",0);
         roomname = (TextView) findViewById(R.id.RoomName);
@@ -90,34 +106,30 @@ public class NewRoom extends ActionBarActivity {
         locIP.setText(room.localURL);
         locPort.setText(room.localPort);
         intIP.setText(room.outsideURL);
-        icon.setSelection(room.icon);
+        icon.setSelection(iconImages.indexOf(room.icon));
         createroom.setLayoutParams(createPar);
         createroom.setText("Update room");
         deleteroom.setLayoutParams(deletePar);
     }
 
+    public void createRoomClicked(View v) {
+        room.name = roomname.getText().toString();
+        room.username = usrname.getText().toString();
+        room.password = password.getText().toString();
+        room.localURL = locIP.getText().toString();
+        room.localPort = locPort.getText().toString();
+        room.outsideURL = intIP.getText().toString();
+        room.icon = iconImages.get(icon.getSelectedItemPosition());
+        RoomManager.ModifyRoomData(roomnumber, room);
 
-    public void onClick(View v) {
-        final int id = v.getId();
-        switch (id) {
-            case R.id.createroom:
-                room.name=(String)roomname.getText().toString();
-                room.username=(String)usrname.getText().toString();
-                room.password=(String)password.getText().toString();
-                room.localURL=(String)locIP.getText().toString();
-                room.localPort=(String)locPort.getText().toString();
-                room.outsideURL =(String)intIP.getText().toString();
-                //room.icon=(int)icon.getSelectedItemId();
-                RoomManager.ModifyRoomData(roomnumber, room);
-            case R.id.deleteroom:
-                RoomManager.DeleteRoom(roomnumber);
-                break;
-
-        }
         this.finish();
-        return;
     }
 
+    public void deleteRoomClicked(View v) {
+        RoomManager.DeleteRoom(roomnumber);
+
+        this.finish();
+    }
 
     public class MyAdapter extends ArrayAdapter<String> {
 
@@ -140,12 +152,8 @@ public class NewRoom extends ActionBarActivity {
             LayoutInflater inflater = getLayoutInflater();
             View row = inflater.inflate(R.layout.row, parent, false);
 
-            TextView label = (TextView) row.findViewById(R.id.ImgName);
-            label.setText(roomnames[position]);
-
-
             ImageView icon = (ImageView) row.findViewById(R.id.image);
-            icon.setImageResource(arr_images[position]);
+            icon.setImageResource(iconImages.get(position));
 
             return row;
         }

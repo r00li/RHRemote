@@ -30,6 +30,8 @@ import java.util.Date;
  */
 
 interface RoomManagerListener {
+    public void roomUpdateStarted(Room r);
+    public void roomUpdateFailed(Room r);
     public void roomUpdateComplete(Room r);
     public void numberOfRoomsChanged();
 }
@@ -59,7 +61,7 @@ public class RoomManager {
     }
 
     public static boolean saveRoomList() {
-        if (rooms == null || rooms.size() == 0) {
+        if (rooms == null) {
             Log.d("serialization", "No rooms to save");
             return false;
         }
@@ -124,12 +126,20 @@ public class RoomManager {
     }
 
     public static void updateRoomData(final Room room) {
+        if (room == null) {
+            return;
+        }
+
         String url = formURLForAPIPath(room, "api");
 
         updateRoomData(room, url);
     }
 
     public static void updateRoomData(final Room room, String url) {
+
+        if (eventListener != null) {
+            eventListener.roomUpdateStarted(room);
+        }
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, (String)null, new Response.Listener<JSONObject>() {
 
@@ -144,8 +154,19 @@ public class RoomManager {
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Error", error.toString());
 
+                        if (error != null && error.networkResponse != null && error.networkResponse.statusCode == 403) {
+                            NotificationManager.showAlertDialogMessage("Authentication error! Check your username and password!");
+                        }
+                        else {
+                            NotificationManager.showToastMessage("We couldn't get the room data! Check your room settings.");
+                        }
+
                         if (progressDialog != null) {
                             progressDialog.dismiss();
+                        }
+
+                        if (eventListener != null) {
+                            eventListener.roomUpdateFailed(room);
                         }
                     }
                 });
@@ -172,7 +193,6 @@ public class RoomManager {
 
                 room.lights.add(light);
             }
-            Log.d("Lights parsed", room.lights.toString());
 
             JSONArray blindArray = response.getJSONArray("blinds");
             room.blinds.clear();
@@ -186,7 +206,6 @@ public class RoomManager {
 
                 room.blinds.add(blind);
             }
-            Log.d("Blinds parsed", room.blinds.toString());
 
             room.lastUpdate = new Date();
 
@@ -203,25 +222,34 @@ public class RoomManager {
         }
         catch (JSONException e) {
             Log.e("JSON err", "Error parsing JSON: " + e.toString());
+            NotificationManager.showToastMessage("Something went wrong! We couldn't read the room response!");
 
             if (progressDialog != null) {
                 progressDialog.dismiss();
             }
+
+            if (eventListener != null) {
+                eventListener.roomUpdateFailed(room);
+            }
         }
     }
 
-    public static void ModifyRoomData (int RoomNumber, Room RoomData)
+    public static void ModifyRoomData (int roomNumber, Room roomData)
     {
-        if (RoomNumber==-1)
-            getRoomList().add(RoomData);
+        if (roomNumber==-1)
+            getRoomList().add(roomData);
         else
-            getRoomList().set(RoomNumber, RoomData);
+            getRoomList().set(roomNumber, roomData);
+
+        saveRoomList();
         numberOfRoomsChanged();
     }
 
-    public static void DeleteRoom(int RoomNumber)
+    public static void DeleteRoom(int roomNumber)
     {
-
+        getRoomList().remove(roomNumber);
+        saveRoomList();
+        numberOfRoomsChanged();
     }
 
     public static String formURLForAPIPath(Room room, String path) {
@@ -229,11 +257,11 @@ public class RoomManager {
         try {
             // TODO: Uncomment port section
             URL addres = new URL("http", room.localURL/*, Integer.parseInt(room.localPort)*/, room.username + "/" + room.password + "/" + path);
-            Log.d("url", addres.toString());
             url = addres.toString();
         }
         catch (MalformedURLException ex) {
             Log.e("url", "Invalid Url" + ex.getMessage());
+            NotificationManager.showAlertDialogMessage("There was an error forming a valid connection URL. Check your room connection settings!");
         }
 
         return url;

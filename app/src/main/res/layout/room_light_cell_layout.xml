@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="60dp"
+    android:id="@+id/light_cell">
 
     <ImageView
         android:layout_marginLeft="5dp"
@@ -10,7 +11,7 @@
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:id="@+id/imageView"
-        android:src="@drawable/ic_bulb_vec"
+        android:src="@drawable/ic_bulb_vec3"
         android:scaleType="centerInside"
         />
 

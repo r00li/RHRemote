@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/spinner"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="30" />
+            android:layout_weight="50" />
     </LinearLayout>
 
     <LinearLayout
@@ -143,13 +143,13 @@
             android:layout_height="match_parent"
             android:layout_weight="30"
             android:text="Create room"
-            android:onClick="onClick"/>
+            android:onClick="createRoomClicked"/>
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/deleteroom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="80"
             android:text="Remove"
-            android:onClick="onClick"/>
+            android:onClick="deleteRoomClicked"/>
     </LinearLayout>
 </LinearLayout>

@@ -4,11 +4,21 @@
     android:layout_height="match_parent">
 
     <ProgressBar
+        android:layout_gravity="center_vertical"
         android:id="@+id/actionbarProgress"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="visible"/>
+
+    <ImageView
+        android:layout_gravity="center_vertical"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:id="@+id/actionbarIcon"
+        android:src="@drawable/ic_rhome_icon"
+        android:scaleType="centerInside"
+        />
 
     <LinearLayout
         android:orientation="vertical" android:layout_width="wrap_content"
@@ -24,13 +34,14 @@
         android:textStyle="bold"
         android:text="RHRemote"/>
     <TextView
+        android:layout_marginTop="-5dp"
             android:id="@+id/actionbarSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#fff"
             android:textStyle="italic"
-            android:text="Room: test"/>
+            android:text=""/>
         </LinearLayout>
 
 </LinearLayout>
