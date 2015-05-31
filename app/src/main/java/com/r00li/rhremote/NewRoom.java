@@ -31,6 +31,7 @@ public class NewRoom extends AppCompatActivity {
     TextView locIP;
     TextView locPort;
     TextView intIP;
+    TextView intPort;
     Button createroom;
     Button deleteroom;
     Spinner icon;
@@ -60,46 +61,24 @@ public class NewRoom extends AppCompatActivity {
         locIP=(TextView) findViewById(R.id.LklIP);
         locPort=(TextView)findViewById(R.id.LklPort);
         intIP=(TextView)findViewById(R.id.IntIP);
+        intPort=(TextView)findViewById(R.id.IntPort);
         icon=(Spinner)findViewById(R.id.spinner);
         createroom=(Button)findViewById(R.id.createroom);
         deleteroom=(Button)findViewById(R.id.deleteroom);
+        LinearLayout.LayoutParams createPar = new LinearLayout.LayoutParams(createroom.getLayoutParams());
         if (roomnumber==-1)
         {
             room=new Room();
-            newroom();
+            createPar.weight = 0;
+            createroom.setText("Create room");
         }
         else
         {
             room = RoomManager.getRoomList().get(roomnumber);
-            updateroom();
+            createPar.weight = 30;
+            createroom.setText("Update room");
         }
 
-    }
-    private void newroom()
-    {
-        LinearLayout.LayoutParams createPar = new LinearLayout.LayoutParams(createroom.getLayoutParams());
-        LinearLayout.LayoutParams deletePar = new LinearLayout.LayoutParams(deleteroom.getLayoutParams());
-        createPar.weight = 0;
-        deletePar.weight=80;
-        /*
-        roomname.setText("New room name");
-        usrname.setText("MyUserName");
-        password.setText("password");
-        locIP.setText("0.0.0.0");
-        locPort.setText("1234");
-        intIP.setText("0.0.0.0");*/
-        icon.setSelection(0);
-        createroom.setLayoutParams(createPar);
-        createroom.setText("Create room");
-        deleteroom.setLayoutParams(deletePar);
-    }
-
-    private void updateroom()
-    {
-        LinearLayout.LayoutParams createPar = new LinearLayout.LayoutParams(createroom.getLayoutParams());
-        LinearLayout.LayoutParams deletePar = new LinearLayout.LayoutParams(deleteroom.getLayoutParams());
-        createPar.weight = 30;
-        deletePar.weight=80;
         roomname.setText(room.name);
         usrname.setText(room.username);
         password.setText(room.password);
@@ -107,9 +86,8 @@ public class NewRoom extends AppCompatActivity {
         locPort.setText(room.localPort);
         intIP.setText(room.outsideURL);
         icon.setSelection(iconImages.indexOf(room.icon));
+        intPort.setText(room.outsidePort);
         createroom.setLayoutParams(createPar);
-        createroom.setText("Update room");
-        deleteroom.setLayoutParams(deletePar);
     }
 
     public void createRoomClicked(View v) {
