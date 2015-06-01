@@ -108,12 +108,19 @@ public class NewRoom extends AppCompatActivity {
 
     public void createRoomClicked(View v) {
         Log.d("settings","onClickCreate");
+        if (!"".equals(roomName.getText().toString()))
         room.name = roomName.getText().toString();
+        if (!"".equals(username.getText().toString()))
         room.username = username.getText().toString();
+        if (!"".equals(password.getText().toString()))
         room.password = password.getText().toString();
+        if (!"".equals(localIP.getText().toString()))
         room.localURL = localIP.getText().toString();
+        if (!"".equals(localPort.getText().toString()))
         room.localPort = localPort.getText().toString();
+        if (!"".equals(internetIP.getText().toString()))
         room.outsideURL = internetIP.getText().toString();
+        if (!"".equals(internetPort.getText().toString()))
         room.outsidePort=internetPort.getText().toString();
         room.icon = iconImages.get(spinnerIcon.getSelectedItemPosition());
         room.color = iconColors.get(spinnerColor.getSelectedItemPosition());

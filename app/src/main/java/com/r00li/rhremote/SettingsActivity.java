@@ -15,7 +15,6 @@ import java.util.List;
 public class SettingsActivity extends PreferenceActivity  {
     // cache rooms to display them
     private  ArrayList<Room> rooms;
-    private static int firstTime =0;
     // cache the Preference we create in this list so we can remove and add them later
     private List<Preference> mPreferenceList = new ArrayList<>();
     private static PreferenceScreen mRoot;
@@ -24,12 +23,8 @@ public class SettingsActivity extends PreferenceActivity  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        if(firstTime ==0) {
-            firstTime =1;
             mRoot = getPreferenceManager().createPreferenceScreen(this);
             setGlobalSettings();
-
-        }
         getPreferencesFromArray();
     }
 
@@ -45,13 +40,6 @@ public class SettingsActivity extends PreferenceActivity  {
         preferenceCategorySettings.setKey("settings");
         preferenceCategorySettings.setTitle("Settings");
         mRoot.addPreference(preferenceCategorySettings);
-
-        EditTextPreference internetIP = new EditTextPreference(this);
-        internetIP.setKey("internetIP");
-        internetIP.setTitle("Internet IP");
-        internetIP.setSummary("Internet IP");
-        internetIP.setDefaultValue("0.0.0.0");
-        preferenceCategorySettings.addPreference(internetIP);
 
         EditTextPreference ssid=new EditTextPreference(this);
         ssid.setKey("ssid");
