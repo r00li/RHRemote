@@ -44,8 +44,8 @@ public class SettingsActivity extends PreferenceActivity  {
         EditTextPreference ssid=new EditTextPreference(this);
         ssid.setKey("ssid");
         ssid.setTitle("SSID");
-        ssid.setSummary("SSID");
-        ssid.setDefaultValue("SSID");
+        ssid.setSummary("SSID of your room network");
+        ssid.setDefaultValue("");
         preferenceCategorySettings.addPreference(ssid);
 
         Preference nRoom =new Preference(this);
