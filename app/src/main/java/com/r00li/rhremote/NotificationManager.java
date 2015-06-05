@@ -19,7 +19,7 @@ public class NotificationManager {
 
     static void showAlertDialogMessage(String message) {
         new AlertDialog.Builder(context)
-                .setTitle("Something went wrong!")
+                .setTitle(context.getString(R.string.alertBoxTitle))
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+
 /**
  * Created by roli on 29/04/15.
  */
@@ -35,13 +36,13 @@ public class Room implements Serializable {
         this.lights = new ArrayList<>();
         this.blinds = new ArrayList<>();
 
-        this.name = "New room";
-        this.username = "user";
-        this.password = "user";
-        this.localURL = "192.168.1.1";
-        this.localPort = "8080";
-        this.outsideURL = "";
-        this.outsidePort = "";
+        this.name = RoomManager.context.getString(R.string.roomName);
+        this.username = RoomManager.context.getString(R.string.roomUsername);
+        this.password = RoomManager.context.getString(R.string.roomPassword);
+        this.localURL = RoomManager.context.getString(R.string.roomLocalUrl);
+        this.localPort = RoomManager.context.getString(R.string.roomLocalPort);
+        this.outsideURL = RoomManager.context.getString(R.string.roomOutsideURL);
+        this.outsidePort = RoomManager.context.getString(R.string.roomOutsidePort);
         this.icon = -1;
         this.color = -1;
     }

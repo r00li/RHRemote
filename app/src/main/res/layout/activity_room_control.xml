@@ -14,7 +14,7 @@
         android:id="@+id/emptyView"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:text="No room data to show!\nUse settings menu to add a new room."
+        android:text="@string/roomControlNoRoom"
         android:gravity="center"
         android:textColor="#FFFFFF"/>
 

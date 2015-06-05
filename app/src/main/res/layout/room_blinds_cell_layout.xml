@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:text="New Text"
+        android:text="@string/roomBlindsNewText"
         android:textColor="#FFFFFF"
         android:id="@+id/textView" />
 
@@ -60,7 +60,7 @@
         android:layout_toLeftOf="@id/blindIndicatorHolder"
         android:layout_marginRight="10dp"
         android:id="@+id/blindButtonPlus"
-        android:text="+"/>
+        android:text="@string/roomBlindsIncrease"/>
 
     <android.support.v7.widget.AppCompatButton
         android:layout_width="35dp"
@@ -70,6 +70,6 @@
         android:layout_toLeftOf="@id/blindButtonPlus"
         android:layout_marginRight="3dp"
         android:id="@+id/blindButtonMinus"
-        android:text="-"/>
+        android:text="@string/roomBlindsDecrease"/>
 
 </RelativeLayout>

@@ -159,10 +159,10 @@ public class RoomManager {
                         Log.e("Error", error.toString());
 
                         if (error != null && error.networkResponse != null && error.networkResponse.statusCode == 403) {
-                            NotificationManager.showAlertDialogMessage("Authentication error! Check your username and password!");
+                            NotificationManager.showAlertDialogMessage(context.getString(R.string.updateRoomAuthenticationError));
                         }
                         else {
-                            NotificationManager.showToastMessage("We couldn't get the room data! Check your room settings.");
+                            NotificationManager.showToastMessage(context.getString(R.string.updateRoomRoomError));
                         }
 
                         if (progressDialog != null) {
@@ -226,7 +226,7 @@ public class RoomManager {
         }
         catch (JSONException e) {
             Log.e("JSON err", "Error parsing JSON: " + e.toString());
-            NotificationManager.showToastMessage("Something went wrong! We couldn't read the room response!");
+            NotificationManager.showToastMessage(context.getString(R.string.updateRoomResponseError));
 
             if (progressDialog != null) {
                 progressDialog.dismiss();
@@ -282,13 +282,13 @@ public class RoomManager {
                     url = address.toString();
                 }
                 else {
-                    NotificationManager.showToastMessage("Error connecting! You are not in the same network as your room and you haven't provided an external URL!");
+                    NotificationManager.showToastMessage(context.getString(R.string.updateRoomNoOutsideURL));
                 }
             }
         }
         catch (MalformedURLException ex) {
             Log.e("url", "Invalid Url" + ex.getMessage());
-            NotificationManager.showAlertDialogMessage("There was an error forming a valid connection URL. Check your room connection settings!");
+            NotificationManager.showAlertDialogMessage(context.getString(R.string.updateRoomURLError));
         }
 
         return url;

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class NewRoom extends AppCompatActivity {
 
-    private static String[] roomNames = {"Bedroom", "Bathroom", "Kitchen", "Living room", "Work room", "Coat room", "Guest room", "Study room"};
+    private static String[] roomNames = {"Bedroom","Bathroom", "Kitchen", "Living room", "Work room", "Coat room", "Guest room", "Study room"};
     private static String[] roomColors = {"1", "2", "3", "4", "5", "6"};
     private static ArrayList<Integer> iconImages;
     private static ArrayList<Integer> iconColors;
@@ -83,13 +83,13 @@ public class NewRoom extends AppCompatActivity {
         {
             room=new Room();
             createPar.weight = 0;
-            roomCreate.setText("Create room");
+            roomCreate.setText(getString(R.string.createRoom));
         }
         else
         {
             room = RoomManager.getRoomList().get(roomNumber);
             createPar.weight = 35;
-            roomCreate.setText("Update room");
+            roomCreate.setText(getString(R.string.updateRoom));
 
             roomName.setText(room.name);
             username.setText(room.username);
@@ -107,7 +107,6 @@ public class NewRoom extends AppCompatActivity {
 
 
     public void createRoomClicked(View v) {
-        Log.d("settings","onClickCreate");
         if (!"".equals(roomName.getText().toString()))
         room.name = roomName.getText().toString();
         if (!"".equals(username.getText().toString()))
@@ -129,7 +128,6 @@ public class NewRoom extends AppCompatActivity {
     }
 
     public void deleteRoomClicked(View v) {
-        Log.d("settings","onClickDelete");
         RoomManager.DeleteRoom(roomNumber);
         this.finish();
     }

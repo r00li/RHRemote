@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    >
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,13 +14,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Room name"/>
+            android:text="@string/newRoomNewRoom"/>
         <EditText
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/roomName"
-            android:hint="Room name"
+            android:hint="@string/newRoomNewRoomHint"
             style="@style/RhomeSettings"/>
     </LinearLayout>
 
@@ -34,13 +33,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="User"/>
+            android:text="@string/newRoomUser"/>
         <EditText
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/userName"
-            android:hint="User name"
+            android:hint="@string/newRoomUserHint"
             style="@style/RhomeSettings"/>
     </LinearLayout>
 
@@ -53,14 +52,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Password"/>
+            android:text="@string/newRoomPassword"/>
         <EditText
             android:layout_weight="50"
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/password"
-            android:hint="password"
+            android:hint="@string/newRoomPasswordHint"
             style="@style/RhomeSettings"/>
     </LinearLayout>
 
@@ -73,13 +72,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Local IP"/>
+            android:text="@string/newRoomLocalURL"/>
         <EditText
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/localIP"
-            android:hint="192.168.1.1"
+            android:hint="@string/newRoomLocalURLHint"
             style="@style/RhomeSettings"/>
     </LinearLayout>
 
@@ -92,13 +91,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Local port"/>
+            android:text="@string/newRoomLocalPort"/>
         <EditText
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/localPort"
-            android:hint="8080"
+            android:hint="@string/newRoomLocalPortHint"
             style="@style/RhomeSettings"/>
     </LinearLayout>
 
@@ -111,13 +110,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Internet IP"/>
+            android:text="@string/newRoomOutsideURL"/>
         <EditText
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/internetIP"
-            android:hint="192.168.1.1"
+            android:hint="@string/newRoomOutsideURLHint"
             style="@style/RhomeSettings"/>
     </LinearLayout>
 
@@ -130,13 +129,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Internet port"/>
+            android:text="@string/newRoomOutsidePort"/>
         <EditText
             android:layout_weight="50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/internetPort"
-            android:hint="8080"
+            android:hint="@string/newRoomOutsidePortHint"
             style="@style/RhomeSettings"/>
     </LinearLayout>
 
@@ -149,7 +148,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="90"
-            android:text="Room icon"/>
+            android:text="@string/newRoomIcon"/>
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -176,14 +175,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="30"
-            android:text="Create room"
             android:onClick="createRoomClicked" />
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/deleteRoom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="80"
-            android:text="Remove"
             android:onClick="deleteRoomClicked" />
     </LinearLayout>
 </LinearLayout>

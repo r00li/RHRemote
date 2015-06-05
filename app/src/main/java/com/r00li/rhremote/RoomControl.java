@@ -102,7 +102,7 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
                 roomControlAdapter.setRoom(RoomManager.getRoomList().get(position));
                 roomControlAdapter.notifyDataSetChanged();
 
-                actionbarSubtitle.setText("Room: " + RoomManager.getRoomList().get(position).name);
+                actionbarSubtitle.setText(getString(R.string.actionbarSubtitle) + RoomManager.getRoomList().get(position).name);
             }
         });
 
@@ -131,7 +131,7 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
         // Update data for first room when loading is done
         if (roomControlAdapter.getRoom() != null) {
             RoomManager.updateRoomData(roomControlAdapter.getRoom());
-            actionbarSubtitle.setText("Room: " + roomControlAdapter.getRoom().name);
+            actionbarSubtitle.setText(getString(R.string.actionbarSubtitle) + roomControlAdapter.getRoom().name);
         }
     }
 
@@ -172,7 +172,7 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
 
         if (RoomManager.getRoomList().size() > 0) {
             roomControlAdapter.setRoom(RoomManager.getRoomList().get(0));
-            actionbarSubtitle.setText("Room: " + roomControlAdapter.getRoom().name);
+            actionbarSubtitle.setText(getString(R.string.actionbarSubtitle) + roomControlAdapter.getRoom().name);
         }
         else {
             roomControlAdapter.setRoom(null);
@@ -455,14 +455,14 @@ class RoomControlAdapter extends BaseAdapter {
             // fill data
             ViewHolder holder = (ViewHolder) rowView.getTag();
 
-            holder.name.setText("Temperature: " + Math.round(room.temperature) + "°C");
+            holder.name.setText(context.getString(R.string.holderTemperature) + Math.round(room.temperature) + context.getString(R.string.holderTemperatureUnit));
 
             if (room.lastUpdate != null) {
                 DateFormat formatter = DateFormat.getTimeInstance(DateFormat.MEDIUM);
-                holder.subtitle.setText("Last updated: " + formatter.format(room.lastUpdate));
+                holder.subtitle.setText(context.getString(R.string.holderSubtitleUpdate) + formatter.format(room.lastUpdate));
             }
             else {
-                holder.subtitle.setText("Last updated: Never");
+                holder.subtitle.setText(context.getString(R.string.holderSubtitleUpdateNever));
             }
         }
 
