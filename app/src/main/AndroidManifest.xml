@@ -13,6 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/RhomeTheme"
         tools:replace="android:icon,android:theme" >
+        <service android:name=".NotificationService" />
         <activity
             android:name=".RoomControl"
             android:label="@string/app_name"

@@ -42,7 +42,7 @@ public class SettingsActivity extends PreferenceActivity  {
         mRoot.addPreference(preferenceCategorySettings);
 
         EditTextPreference ssid=new EditTextPreference(this);
-        ssid.setKey("ssid");
+        ssid.setKey("SSID");
         ssid.setTitle("SSID");
         ssid.setSummary("SSID of your room network");
         ssid.setDefaultValue("");

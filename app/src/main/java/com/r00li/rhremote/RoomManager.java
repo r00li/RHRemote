@@ -1,12 +1,15 @@
 package com.r00li.rhremote;
 
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -46,6 +49,19 @@ public class RoomManager {
     public static Context context;
     public static RoomManagerListener eventListener;
     private static ProgressDialog progressDialog;
+    private static Room currentRoom;
+
+    public static Room getCurrentRoom() {
+        return currentRoom;
+    }
+
+    public static void setCurrentRoom(Room currentRoom) {
+        RoomManager.currentRoom = currentRoom;
+
+        Log.d("Notification", "Sending room change broadcast");
+        Intent localIntent = new Intent(NotificationService.ROOM_SELECTED);
+        context.sendBroadcast(localIntent);
+    }
 
     public static ArrayList<Room> getRoomList() {
 
@@ -113,14 +129,18 @@ public class RoomManager {
         }
     }
 
-    public static void modifyLightStatus(Room room, int lightId, int newStatus) {
-        progressDialog = ProgressDialog.show(context, "", "Please wait...");
+    public static void modifyLightStatus(Room room, int lightId, int newStatus, boolean background) {
+        if (!background) {
+            progressDialog = ProgressDialog.show(context, "", "Please wait...");
+        }
         String url = formURLForAPIPath(room, "api/lght/" + lightId + "/" + ((newStatus == 0)? "off" : "on"));
         updateRoomData(room, url);
     }
 
-    public static void modifyBlindStatus(Room room, int blindId, int newStatus) {
-        progressDialog = ProgressDialog.show(context, "", "Please wait...");
+    public static void modifyBlindStatus(Room room, int blindId, int newStatus, boolean background) {
+        if (!background) {
+            progressDialog = ProgressDialog.show(context, "", "Please wait...");
+        }
         String url = formURLForAPIPath(room, "api/bld/" + blindId + "/" + newStatus);
         updateRoomData(room, url);
     }
@@ -215,6 +235,10 @@ public class RoomManager {
 
             Log.d("Parsing complete", "Rom parsing success." );
             saveRoomList();
+
+            // Update the notification
+            Intent localIntent = new Intent(NotificationService.ROOM_UPDATED);
+            context.sendBroadcast(localIntent);
 
             if (eventListener != null) {
                 eventListener.roomUpdateComplete(room);

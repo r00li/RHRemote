@@ -38,7 +38,8 @@ public class NetworkHelper {
 
     public <T> void addToRequestQueue(Request<T> req) {
         // We need to increase the default timeout because blind requests take longer
-        req.setRetryPolicy(new DefaultRetryPolicy(30*1000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        req.setTag("RHomeRequest");
+        req.setRetryPolicy(new DefaultRetryPolicy(30*1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         getRequestQueue().add(req);
     }

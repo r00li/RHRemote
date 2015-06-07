@@ -1,7 +1,10 @@
 package com.r00li.rhremote;
 
+import android.animation.LayoutTransition;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.IntentService;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +13,7 @@ import android.graphics.Color;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +33,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
@@ -52,6 +61,7 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
     private RoomControlAdapter roomControlAdapter;
     private RoomScrollerAdapter roomScrollerAdapter;
     private WheelView wheelView;
+    private ListView roomControlListView;
 
     private ProgressBar actionbarProgressBar;
     private TextView actionbarTitle;
@@ -64,10 +74,12 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
 
         setContentView(R.layout.activity_room_control);
 
+        // Initialize the managers
         RoomManager.context = this;
         RoomManager.eventListener = this;
         NotificationManager.context = this;
 
+        // Customize the action bar
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
@@ -83,13 +95,13 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
 
         actionbarProgressBar.setVisibility(View.GONE);
 
+        // Setup the wheel selection menu
         wheelView = (WheelView) findViewById(R.id.wheelview);
-
-        //populate the adapter, that knows how to draw each item (as you would do with a ListAdapter)
         roomScrollerAdapter = new RoomScrollerAdapter(RoomManager.getRoomList(), this);
         wheelView.setAdapter(roomScrollerAdapter);
+        wheelView.setSelectionColor(Color.parseColor("#0284f0"));
 
-        //a listener for receiving a callback for when the item closest to the selection angle changes
+        // Callback for Wheel selector
         wheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectListener() {
             @Override
             public void onWheelItemSelected(WheelView parent, int position) {
@@ -98,41 +110,46 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
                     return;
                 }
 
+                RoomManager.setCurrentRoom(RoomManager.getRoomList().get(position));
                 RoomManager.updateRoomData(RoomManager.getRoomList().get(position));
                 roomControlAdapter.setRoom(RoomManager.getRoomList().get(position));
-                roomControlAdapter.notifyDataSetChanged();
+                roomControlAdapter.notifyDataSetInvalidated();
+                if (roomControlListView != null) {
+                    roomControlListView.startLayoutAnimation();
+                }
 
                 actionbarSubtitle.setText("Room: " + RoomManager.getRoomList().get(position).name);
             }
         });
 
-        wheelView.setOnWheelItemClickListener(new WheelView.OnWheelItemClickListener() {
-            @Override
-            public void onWheelItemClick(WheelView parent, int position, boolean isSelected) {
-                String msg = String.valueOf(position) + " " + isSelected;
-            }
-        });
-
-        //initialise the selection drawable with the first contrast color
-        wheelView.setSelectionColor(Color.parseColor("#0284f0"));
-
-
-        // ROOM ADAPTER
+        // Room control adapter
         roomControlAdapter = new RoomControlAdapter(this);
-        Room currentRoom = (RoomManager.getRoomList().size() > 0)? RoomManager.getRoomList().get(0) : null;
+        Room currentRoom = (RoomManager.getCurrentRoom() != null)? RoomManager.getCurrentRoom() : (RoomManager.getRoomList().size() > 0) ? RoomManager.getRoomList().get(0) : null;
+
         roomControlAdapter.setRoom(currentRoom);
-        ListView list = (ListView) findViewById(R.id.listview);
-        list.setAdapter(roomControlAdapter);
+        roomControlListView = (ListView) findViewById(R.id.listview);
+        roomControlListView.setAdapter(roomControlAdapter);
 
         TextView emptyRow = (TextView) findViewById(R.id.emptyView);
-        list.setEmptyView(emptyRow);
-
+        roomControlListView.setEmptyView(emptyRow);
 
         // Update data for first room when loading is done
         if (roomControlAdapter.getRoom() != null) {
             RoomManager.updateRoomData(roomControlAdapter.getRoom());
             actionbarSubtitle.setText("Room: " + roomControlAdapter.getRoom().name);
         }
+
+        roomControlListView.setLayoutAnimation(getListViewAnimationController());
+
+        // Scroll wheelView to position
+        if (currentRoom != null) {
+            wheelView.setPosition(RoomManager.getRoomList().indexOf(currentRoom));
+        }
+
+        // Create Notification service (shows persistent notification)
+        RoomManager.setCurrentRoom(currentRoom); // Sets the current room - used by persistent notification
+        Intent deleteIntent = new Intent(this, NotificationService.class);
+        startService(deleteIntent);
     }
 
     @Override
@@ -189,6 +206,27 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
 
     public void refreshIconClicked(MenuItem item) {
         RoomManager.updateRoomData(roomControlAdapter.getRoom());
+    }
+
+    public LayoutAnimationController getListViewAnimationController() {
+
+        // Set up listview animation controller
+        AnimationSet set = new AnimationSet(true);
+
+        Animation animation = new AlphaAnimation(0.0f, 1.0f);
+        animation.setDuration(300);
+        set.addAnimation(animation);
+
+        animation = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f
+        );
+        animation.setDuration(300);
+        set.addAnimation(animation);
+
+        LayoutAnimationController controller = new LayoutAnimationController(set, 0.15f);
+
+        return controller;
     }
 
     static class RoomScrollerAdapter implements WheelAdapter {
@@ -249,7 +287,6 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
 
             Intent i = new Intent(this, SettingsActivity.class);
             startActivityForResult(i, 1);
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -372,14 +409,27 @@ class RoomControlAdapter extends BaseAdapter {
             ViewHolder holder = (ViewHolder) rowView.getTag();
 
             holder.name.setText(room.lights.get(position).name);
+            holder.lightSwitch.setOnCheckedChangeListener(null);
             holder.lightSwitch.setChecked(room.lights.get(position).status != 0);
 
             // Action listeners
             final int innerIndex = position;
+            /*holder.lightSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SwitchCompat buttonView = (SwitchCompat) v;
+                    buttonView.setChecked(!buttonView.isChecked()); // The actual switch state should only change when the api confirms the action
+                    RoomManager.modifyLightStatus(room, room.lights.get(innerIndex).id, (!buttonView.isChecked() == false) ? 0 : 1);
+                }
+            });*/
+
             holder.lightSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    RoomManager.modifyLightStatus(room, room.lights.get(innerIndex).id, (isChecked == false)? 0 : 1);
+                    buttonView.setOnCheckedChangeListener(null);
+                    buttonView.setChecked(!isChecked);
+                    buttonView.setOnCheckedChangeListener(this);
+                    RoomManager.modifyLightStatus(room, room.lights.get(innerIndex).id, (isChecked == false) ? 0 : 1, false);
                 }
             });
         }
@@ -428,14 +478,14 @@ class RoomControlAdapter extends BaseAdapter {
             holder.blindButtonMinus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RoomManager.modifyBlindStatus(room, room.blinds.get(realIndex).id, room.blinds.get(realIndex).status - 1);
+                    RoomManager.modifyBlindStatus(room, room.blinds.get(realIndex).id, room.blinds.get(realIndex).status - 1, false);
                 }
             });
 
             holder.blindButtonPlus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RoomManager.modifyBlindStatus(room, room.blinds.get(realIndex).id, room.blinds.get(realIndex).status + 1);
+                    RoomManager.modifyBlindStatus(room, room.blinds.get(realIndex).id, room.blinds.get(realIndex).status + 1, false);
                 }
             });
         }
