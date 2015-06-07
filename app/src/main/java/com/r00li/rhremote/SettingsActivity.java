@@ -38,20 +38,20 @@ public class SettingsActivity extends PreferenceActivity  {
     {
         PreferenceCategory preferenceCategorySettings = new PreferenceCategory(this);
         preferenceCategorySettings.setKey("settings");
-        preferenceCategorySettings.setTitle("Settings");
+        preferenceCategorySettings.setTitle(getString(R.string.settingsSettings));
         mRoot.addPreference(preferenceCategorySettings);
 
         EditTextPreference ssid=new EditTextPreference(this);
         ssid.setKey("SSID");
-        ssid.setTitle("SSID");
-        ssid.setSummary("SSID of your room network");
+        ssid.setTitle(getString(R.string.settingsSSID));
+        ssid.setSummary(getString(R.string.settingsSSIDSummary));
         ssid.setDefaultValue("");
         preferenceCategorySettings.addPreference(ssid);
 
         Preference nRoom =new Preference(this);
         nRoom.setKey("newRoom");
-        nRoom.setTitle("Add room");
-        nRoom.setSummary("Add new room");
+        nRoom.setTitle(getString(R.string.settingsNewRoom));
+        nRoom.setSummary(getString(R.string.settingsNewRoomSummary));
         preferenceCategorySettings.addPreference(nRoom);
         Intent SetNewRoom= new Intent();
         SetNewRoom.setAction("newRoom");
@@ -60,8 +60,8 @@ public class SettingsActivity extends PreferenceActivity  {
 
         Preference about=new Preference(this);
         about.setKey("about");
-        about.setTitle("About");
-        about.setSummary("about");
+        about.setTitle(getString(R.string.settingsAbout));
+        about.setSummary(getString(R.string.settingsAboutSummary));
         preferenceCategorySettings.addPreference(about);
         Intent aboutS= new Intent();
         aboutS.setAction("about");
@@ -69,7 +69,7 @@ public class SettingsActivity extends PreferenceActivity  {
 
         preferenceCategoryRooms = new PreferenceCategory(this);
         preferenceCategoryRooms.setKey("rooms");
-        preferenceCategoryRooms.setTitle("Rooms");
+        preferenceCategoryRooms.setTitle(getString(R.string.settingsRooms));
         mRoot.addPreference(preferenceCategoryRooms);
     }
     private void getPreferencesFromArray() {
@@ -82,7 +82,7 @@ public class SettingsActivity extends PreferenceActivity  {
             Preference tRoom =new Preference(this);
             tRoom.setKey("room" + Integer.toString(i));
             tRoom.setTitle(room.name);
-            tRoom.setSummary("Room settings");
+            tRoom.setSummary(getString(R.string.settingsRoomSettings));
             preferenceCategoryRooms.addPreference(tRoom);
             Intent SetNewRoom= new Intent();
             SetNewRoom.setAction("newRoom");
