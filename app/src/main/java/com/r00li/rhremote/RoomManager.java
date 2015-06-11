@@ -296,7 +296,7 @@ public class RoomManager {
         try {
             if (savedSSID.equals(currentSSID)) {
                 // TODO: Uncomment port section
-                URL address = new URL("http", room.localURL/*, Integer.parseInt(room.localPort)*/, room.username + "/" + room.password + "/" + path);
+                URL address = new URL("http", room.localURL, Integer.parseInt(room.localPort), room.username + "/" + room.password + "/" + path);
                 url = address.toString();
             }
             else {
