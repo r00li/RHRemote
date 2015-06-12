@@ -49,6 +49,7 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -188,10 +189,12 @@ public class RoomControl extends AppCompatActivity implements RoomManagerListene
         wheelView.setAdapter(roomScrollerAdapter);
 
         if (RoomManager.getRoomList().size() > 0) {
+            RoomManager.setCurrentRoom(RoomManager.getRoomList().get(0));
             roomControlAdapter.setRoom(RoomManager.getRoomList().get(0));
             actionbarSubtitle.setText(getString(R.string.actionbarSubtitle) + roomControlAdapter.getRoom().name);
         }
         else {
+            RoomManager.setCurrentRoom(null);
             roomControlAdapter.setRoom(null);
             actionbarSubtitle.setText("");
         }
@@ -505,11 +508,13 @@ class RoomControlAdapter extends BaseAdapter {
             // fill data
             ViewHolder holder = (ViewHolder) rowView.getTag();
 
-            holder.name.setText(context.getString(R.string.holderTemperature) + Math.round(room.temperature) + context.getString(R.string.holderTemperatureUnit));
+            holder.name.setText(context.getString(R.string.holderTemperature) + " " + Math.round(room.temperature) + context.getString(R.string.holderTemperatureUnit));
 
             if (room.lastUpdate != null) {
+                boolean old = ((new Date()).getTime() - room.lastUpdate.getTime() > 1000*60*60);
+
                 DateFormat formatter = DateFormat.getTimeInstance(DateFormat.MEDIUM);
-                holder.subtitle.setText(context.getString(R.string.holderSubtitleUpdate) + formatter.format(room.lastUpdate));
+                holder.subtitle.setText(context.getString(R.string.holderSubtitleUpdate) + " " + formatter.format(room.lastUpdate) + " " + (old? context.getString(R.string.holderSubtitleUpdateOld) : ""));
             }
             else {
                 holder.subtitle.setText(context.getString(R.string.holderSubtitleUpdateNever));

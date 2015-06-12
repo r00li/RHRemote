@@ -90,6 +90,7 @@ public class NewRoom extends AppCompatActivity {
             room = RoomManager.getRoomList().get(roomNumber);
             createPar.weight = 35;
             roomCreate.setText(getString(R.string.updateRoom));
+            roomDelete.setText(getString(R.string.deleteRoom));
 
             roomName.setText(room.name);
             username.setText(room.username);

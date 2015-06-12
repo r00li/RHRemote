@@ -158,6 +158,14 @@ public class RoomManager {
     public static void updateRoomData(final Room room, String url) {
 
         if (url.length() < 1) {
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
+
+            if (eventListener != null) {
+                eventListener.roomUpdateFailed(room);
+            }
+
             return;
         }
 
@@ -287,7 +295,7 @@ public class RoomManager {
         WifiManager wifiManager = (WifiManager) context.getSystemService(context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         String currentSSID = wifiInfo.getSSID();
-        if (currentSSID.startsWith("\"") && currentSSID.endsWith("\"")){
+        if (currentSSID.startsWith("\"") && currentSSID.endsWith("\"")) {
             // Android 4.2 and later puts extra " " around SSID name returned - remove them
             currentSSID = currentSSID.substring(1, currentSSID.length()-1);
         }
@@ -295,22 +303,41 @@ public class RoomManager {
         String url = "";
         try {
             if (savedSSID.equals(currentSSID)) {
-                // TODO: Uncomment port section
-                URL address = new URL("http", room.localURL, Integer.parseInt(room.localPort), room.username + "/" + room.password + "/" + path);
-                url = address.toString();
+                if (room.localURL.length() > 0 && room.localPort.length() > 0) {
+                    int firstSlashIndex = room.localURL.indexOf('/');
+                    String addonURL = "";
+                    String baseURL = room.localURL;
+                    if (firstSlashIndex != -1) {
+                        addonURL = room.localURL.substring(firstSlashIndex);
+                        baseURL = room.localURL.substring(0, firstSlashIndex);
+                    }
+                    URL address = new URL("http", baseURL, Integer.parseInt(room.localPort), (addonURL.equals("/") ? "" : addonURL) + "/" + room.username + "/" + room.password + "/" + path);
+                    url = address.toString();
+                }
+                else {
+                    NotificationManager.showToastMessage(context.getString(R.string.updateRoomURLError));
+                }
             }
             else {
                 Log.d("url", "Using external room URL (current SSID: " + currentSSID + ", saved SSID: " + savedSSID + ")");
                 if (room.outsideURL.length() > 0 && room.outsidePort.length() > 0) {
-                    URL address = new URL("http", room.outsideURL, Integer.parseInt(room.outsidePort), room.username + "/" + room.password + "/" + path);
+                    int firstSlashIndex = room.outsideURL.indexOf('/');
+                    String addonURL = "";
+                    String baseURL = room.outsideURL;
+                    if (firstSlashIndex != -1) {
+                        addonURL = room.outsideURL.substring(firstSlashIndex);
+                        baseURL = room.outsideURL.substring(0, firstSlashIndex);
+                    }
+                    URL address = new URL("http", baseURL, Integer.parseInt(room.outsidePort), (addonURL.equals("/") ? "" : addonURL) + "/" + room.username + "/" + room.password + "/" + path);
                     url = address.toString();
                 }
                 else {
                     NotificationManager.showToastMessage(context.getString(R.string.updateRoomNoOutsideURL));
                 }
             }
+            Log.d("url", "Url formed: " + url);
         }
-        catch (MalformedURLException ex) {
+        catch (Exception ex) {
             Log.e("url", "Invalid Url" + ex.getMessage());
             NotificationManager.showAlertDialogMessage(context.getString(R.string.updateRoomURLError));
         }
